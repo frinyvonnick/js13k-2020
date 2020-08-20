@@ -6,10 +6,27 @@
   "dependencies": {
     "kontra": "^7.1.0"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "devDependencies": {
+    "bundlesize": "^0.18.0",
+    "jszip-cli": "^1.4.24",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "2.0.5",
+    "serve": "^11.3.2"
   },
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --no-source-maps --experimental-scope-hoisting --public-url ./",
+    "serve": "serve dist",
+    "zip": "npx jszip-cli dist --output submission.zip",
+    "size": "bundlesize",
+    "format": "prettier --write src"
+  },
+  "bundlesize": [
+    {
+      "path": "submission.zip",
+      "maxSize": "13 kB"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/js13k-2020.git"
