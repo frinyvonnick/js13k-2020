@@ -105,3 +105,6 @@ dist
 
 # Mac users
 .DS_Store
+
+# zip file
+submission.zip
