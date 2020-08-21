@@ -40,7 +40,7 @@ let background = Sprite({
     y: 550,
     color: "blue",
     width: 300,
-    height: 20,
+    height: 10,
 })
 
 let background2 = Sprite({
@@ -59,10 +59,12 @@ let scene = Scene({
 
         let prevFrameHero = { ...hero };
 
+        let hasCollided = false;
         hero.advance();
 
         for(let i = 1 ; i < children.length ; i++) {
             if (collides(hero, children[i])) {
+                hasCollided = true;
                 let collider = children[i];
                 if (prevFrameHero.position.x + prevFrameHero._w > collider.x &&
                     prevFrameHero.position.x < collider.x + collider.width) {
@@ -86,7 +88,7 @@ let scene = Scene({
                     let b = ya - a * xa;
                     let yCollision = a * collider.x + b;
 
-                    if (yCollision < collider.y) {
+                    if (yCollision < collider.y || (hero.isOnGround && collider.y < hero.y + maxStairsHeight)) {
                         hero = Object.assign(hero, prevFrameHero);
                         hero.isOnGround = true;
                         hero.dy = 0;
@@ -101,9 +103,12 @@ let scene = Scene({
                         }
                     }
                 } 
-                return
             }
         }
+
+        if (hasCollided)
+            return
+
         hero = Object.assign(hero, prevFrameHero);
         
         if (hero.isOnGround && hero.dy > 0) {
