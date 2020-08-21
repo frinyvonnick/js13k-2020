@@ -13,7 +13,9 @@ let { canvas } = init();
 
 initKeys();
 
-const gravity = 0.05;
+const gravity = 0.4;
+const maxSpeed = 10;
+const xSpeed = 5;
 
 let sprite = Sprite({
     x: 100, // starting x,y position of the sprite
@@ -26,8 +28,8 @@ let sprite = Sprite({
     update: function () {
         this.advance();
         
-        this.dx = clamp(-5, 5, this.dx);
-        this.dy = clamp(-5, 5, this.dy);
+        this.dx = clamp(-maxSpeed, maxSpeed, this.dx);
+        this.dy = clamp(-maxSpeed, maxSpeed, this.dy);
     }
 });
 
@@ -65,15 +67,15 @@ let scene = Scene({
                     prevFrameHero.position.x < collider.x + collider.width) {
                     if (prevFrameHero.position.y > collider.y) {
                         hero = Object.assign(hero, prevFrameHero);
-                        hero.dy = clamp(0, 5, hero.dy);
+                        hero.dy = clamp(0, maxSpeed, hero.dy);
                         hero.y = collider.y + collider.height;
                     } else {
                         hero = Object.assign(hero, prevFrameHero);
                         hero.isOnGround = true;
-                        hero.dy = clamp(-5, 0, hero.dy);
+                        hero.dy = clamp(-maxSpeed, 0, hero.dy);
                         hero.y = collider.y - hero.height;
                     }
-                } else if (prevFrameHero.position.x + prevFrameHero._w <= collider.x) {
+                } else {
                     let xa = prevFrameHero.position.x + prevFrameHero._w;
                     let xb = hero.x + hero.width;
                     let ya = prevFrameHero.position.y + prevFrameHero._h;
@@ -84,40 +86,20 @@ let scene = Scene({
                     let yCollision = a * collider.x + b;
 
                     if (yCollision < collider.y) {
-                        console.log("Corner up");
                         hero = Object.assign(hero, prevFrameHero);
                         hero.isOnGround = true;
                         hero.dy = 0;
                         hero.y = collider.y - hero.height;
                     } else {
-                        console.log("Corner down");
                         hero = Object.assign(hero, prevFrameHero);
                         hero.dx = 0;
-                        hero.x = collider.x - hero.width;
+                        if (prevFrameHero.position.x + prevFrameHero._w <= collider.x) {
+                            hero.x = collider.x - hero.width;
+                        } else {
+                            hero.x = collider.x + collider.width;
+                        }
                     }
-                } else {
-                    let xa = hero.x;
-                    let xb = prevFrameHero.position.x;
-                    let ya = hero.y + hero.height;
-                    let yb = prevFrameHero.position.y + prevFrameHero._h;
-
-                    let a = (yb - ya) / (xb - xa);
-                    let b = ya - a * xa;
-                    let yCollision = a * collider.x + b;
-
-                    if (yCollision < collider.y) {
-                        console.log("Corner up");
-                        hero = Object.assign(hero, prevFrameHero);
-                        hero.isOnGround = true;
-                        hero.dy = 0;
-                        hero.y = collider.y - hero.height;
-                    } else {
-                        console.log("Corner down");
-                        hero = Object.assign(hero, prevFrameHero);
-                        hero.dx = 0;
-                        hero.x = collider.x + collider.width;
-                    }
-                }
+                } 
                 return
             }
         }
@@ -132,18 +114,18 @@ let loop = GameLoop({
     update: function () {
         // update the game state
         sprite.update();
-        scene.lookAt(sprite);
+        sprite.dx = 0;
         if (keyPressed('a')) {
-            sprite.dx = -2;
-        } else if (keyPressed('d')) {
-            sprite.dx = 2;
-        } else {
-            sprite.dx = 0;
+            sprite.dx -= xSpeed;
+        }
+        if (keyPressed('d')) {
+            sprite.dx += xSpeed;
         }
         if (keyPressed('w') && sprite.isOnGround) {
-            sprite.dy = -20;
+            sprite.dy = -maxSpeed;
         }
         scene.checkHeroGround(scene.children)
+        scene.lookAt(sprite);
         // wrap the sprites position when it reaches
         // the edge of the screen
         if (sprite.x > canvas.width) {
