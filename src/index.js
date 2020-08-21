@@ -16,6 +16,7 @@ initKeys();
 const gravity = 0.4;
 const maxSpeed = 10;
 const xSpeed = 5;
+const maxStairsHeight = 20;
 
 let sprite = Sprite({
     x: 100, // starting x,y position of the sprite
@@ -44,7 +45,7 @@ let background = Sprite({
 
 let background2 = Sprite({
     x: -50,
-    y: 650,
+    y: 570,
     color: "blue",
     width: 50,
     height:10,
@@ -57,7 +58,7 @@ let scene = Scene({
         let hero = children[0]
 
         let prevFrameHero = { ...hero };
-        
+
         hero.advance();
 
         for(let i = 1 ; i < children.length ; i++) {
@@ -104,6 +105,23 @@ let scene = Scene({
             }
         }
         hero = Object.assign(hero, prevFrameHero);
+        
+        if (hero.isOnGround && hero.dy > 0) {
+            let tmpdy = hero.dy;
+            hero.dy = maxStairsHeight;
+            hero.advance();
+            for(let i = 1 ; i < children.length ; i++) {
+                if (collides(hero, children[i])) {
+                    let collider = children[i];
+                    hero.dy = 0;
+                    hero.y = collider.y - hero.height;
+                    return
+                }
+            }
+            hero = Object.assign(hero, prevFrameHero);
+            hero.dy = tmpdy;
+        }
+
         hero.isOnGround = false;
         hero.ddy = gravity;
     }
