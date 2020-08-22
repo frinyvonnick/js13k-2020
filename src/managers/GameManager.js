@@ -30,7 +30,9 @@ export class GameManager {
               preventHeroFromFalling(hero, object);
             } else if (heroTopYAtCollisionTime < object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
-            } 
+            } else {
+              preventHeroFromGoingLeft(hero, object);
+            }
           } else {
             const heroYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
               hero,
@@ -46,6 +48,8 @@ export class GameManager {
               preventHeroFromFalling(hero, object);
             } else if (heroTopYAtCollisionTime < object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
+            } else {
+              preventHeroFromGoingRight(hero, object);
             }
           }
         }
@@ -75,11 +79,7 @@ function getTopRightFromHeroAtCollisionTime(hero, futureFrame, object) {
   const xb = futureFrame.x + futureFrame.width;
   const yb = futureFrame.y;
 
-  return getContactYWithLinearFunction(
-    { xa, ya },
-    { xb, yb },
-    object.x
-  );
+  return getContactYWithLinearFunction({ xa, ya }, { xb, yb }, object.x);
 }
 
 function getBottomLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
@@ -133,4 +133,14 @@ function preventHeroFromFalling(hero, object) {
 function preventHeroFromGoingUpper(hero, object) {
   hero.y = object.y + object.height;
   hero.dy = 0;
+}
+
+function preventHeroFromGoingLeft(hero, object) {
+  hero.x = object.x + object.width;
+  hero.dx = 0;
+}
+
+function preventHeroFromGoingRight(hero, object) {
+  hero.x = object.x - hero.width;
+  hero.dx = 0;
 }
