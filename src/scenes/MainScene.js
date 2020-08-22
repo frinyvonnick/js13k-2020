@@ -15,10 +15,6 @@ export function makeMainScene() {
     children: [hero, ...platforms],
     update: function () {
       gameManager.update(hero, platforms);
-      this.children.forEach((child) => child.update());
-    },
-    render: function () {
-      this.children.forEach((child) => child.render());
     },
   });
 }

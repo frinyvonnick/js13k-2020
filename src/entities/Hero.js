@@ -31,12 +31,12 @@ export function makeHero() {
       this.dy = clamp(-MAX_SPEED, MAX_SPEED, this.dy);
     },
     update: function () {
+      this.advance();
+
       this.ddy = 0.4;
 
       this.handleJump();
       this.handleMovement();
-
-      this.advance();
     },
   });
 }

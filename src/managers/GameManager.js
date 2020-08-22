@@ -3,7 +3,6 @@ import { Sprite, collides } from "kontra";
 export class GameManager {
   update(hero, objects) {
     const futureFrame = new Sprite({ ...hero });
-
     futureFrame.advance();
 
     objects.forEach((object) => {
@@ -21,32 +20,32 @@ export class GameManager {
               futureFrame,
               object
             );
-            const heroTopYAtCollisionTime = getBottomLeftFromHeroAtCollisionTime(
+            const heroTopYAtCollisionTime = getTopLeftFromHeroAtCollisionTime(
               hero,
               futureFrame,
               object
             );
-            if (heroBottomYAtCollisionTime >= object.y) {
+            if (heroBottomYAtCollisionTime <= object.y) {
               preventHeroFromFalling(hero, object);
-            } else if (heroTopYAtCollisionTime < object.y + object.height) {
+            } else if (heroTopYAtCollisionTime > object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
             } else {
               preventHeroFromGoingLeft(hero, object);
             }
           } else {
-            const heroYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
+            const heroBottomYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
               hero,
               futureFrame,
               object
             );
-            const heroTopYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
+            const heroTopYAtCollisionTime = getTopRightFromHeroAtCollisionTime(
               hero,
               futureFrame,
               object
             );
-            if (heroBottomYAtCollisionTime >= object.y) {
+            if (heroBottomYAtCollisionTime <= object.y) {
               preventHeroFromFalling(hero, object);
-            } else if (heroTopYAtCollisionTime < object.y + object.height) {
+            } else if (heroTopYAtCollisionTime > object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
             } else {
               preventHeroFromGoingRight(hero, object);
@@ -100,7 +99,7 @@ function getBottomRightFromHeroAtCollisionTime(hero, futureFrame, object) {
   const xa = hero.x + hero.width;
   const ya = hero.y + hero.height;
 
-  const xb = futureFrame.x + futureFrame + width;
+  const xb = futureFrame.x + futureFrame.width;
   const yb = futureFrame.y + futureFrame.height;
 
   return getContactYWithLinearFunction({ xa, ya }, { xb, yb }, object.x);
@@ -121,7 +120,7 @@ function doesHeroComeFromTop(hero, object) {
 }
 
 function doesHeroComeFromRight(hero, object) {
-  return hero.x < object.x + object.width;
+  return hero.x >= object.x + object.width;
 }
 
 function preventHeroFromFalling(hero, object) {
