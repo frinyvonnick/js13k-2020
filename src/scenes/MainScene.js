@@ -1,23 +1,24 @@
 import { Scene } from "kontra";
 
-import { Hero } from "../entities/Hero.js";
+import { makeHero } from "../entities/Hero.js";
+import { makePlatform } from "../entities/Platform.js";
 
-export class MainScene extends Scene {
-  constructor() {
-    const hero = new Hero()
-    super({
-      id: "game",
-      children: [hero]
-    })
-  }
+import { GameManager } from "../managers/GameManager.js";
 
-  update() {
-    this.children.forEach(child => child.update());
-    super.update();
-  }
+export function makeMainScene() {
+  const hero = makeHero();
+  const platform = makePlatform();
+  const gameManager = new GameManager();
 
-  render() {
-    this.children.forEach(child => child.render());
-    super.render();
-  }
+  return Scene({
+    id: "game",
+    children: [hero, platform],
+    update: function () {
+      gameManager.update(hero, [platform]);
+      this.children.forEach((child) => child.update());
+    },
+    render: function () {
+      this.children.forEach((child) => child.render());
+    },
+  });
 }

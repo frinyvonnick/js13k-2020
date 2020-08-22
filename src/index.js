@@ -1,12 +1,12 @@
 import { init, Sprite, GameLoop, initKeys } from "kontra";
 
-import { MainScene } from "./scenes/MainScene.js";
+import { makeMainScene } from "./scenes/MainScene.js";
 
 const { canvas } = init();
 
 initKeys();
 
-const scene = new MainScene();
+const scene = makeMainScene();
 
 const loop = GameLoop({
   // create the main game loop

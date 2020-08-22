@@ -5,7 +5,7 @@ const MAX_SPEED = 10
 export function makeHero() {
   return Sprite({
     x: 100, // starting x,y position of the sprite
-    y: 80,
+    y: 10,
     color: "red", // fill color of the sprite rectangle
     width: 200, // width and height of the sprite rectangle
     height: 200,
