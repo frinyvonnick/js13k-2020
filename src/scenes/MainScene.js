@@ -1,6 +1,6 @@
 import { Scene } from "kontra";
 
-import { Hero } from "../entities/Hero";
+import { Hero } from "../entities/Hero.js";
 
 export class MainScene extends Scene {
   constructor() {
