@@ -16,6 +16,5 @@ export function makePlatforms() {
       width: 200, // width and height of the sprite rectangle
       height: 50,
     }),
-  ]
+  ];
 }
-
