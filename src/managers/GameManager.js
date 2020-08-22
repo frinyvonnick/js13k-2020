@@ -27,6 +27,7 @@ function doesHeroComeFromTop(hero, object) {
 }
 
 function preventHeroFromFalling(hero, object) {
+  hero.isGrounded = true
   hero.y = object.y - hero.height
   hero.dy = 0
 }
