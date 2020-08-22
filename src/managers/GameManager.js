@@ -11,6 +11,8 @@ export class GameManager {
         if (doesHeroComeFromTopOrBottom(hero, object)) {
           if (doesHeroComeFromTop(hero, object)) {
             preventHeroFromFalling(hero, object)
+          } else {
+            preventHeroFromGoingUpper(hero, object)
           }
         }
       }
@@ -29,5 +31,10 @@ function doesHeroComeFromTop(hero, object) {
 function preventHeroFromFalling(hero, object) {
   hero.isGrounded = true
   hero.y = object.y - hero.height
+  hero.dy = 0
+}
+
+function preventHeroFromGoingUpper(hero, object) {
+  hero.y = object.y + object.height
   hero.dy = 0
 }

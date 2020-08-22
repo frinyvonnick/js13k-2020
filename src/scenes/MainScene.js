@@ -1,20 +1,20 @@
 import { Scene } from "kontra";
 
 import { makeHero } from "../entities/Hero.js";
-import { makePlatform } from "../entities/Platform.js";
+import { makePlatforms } from "../entities/Platform.js";
 
 import { GameManager } from "../managers/GameManager.js";
 
 export function makeMainScene() {
   const hero = makeHero();
-  const platform = makePlatform();
+  const platforms = makePlatforms();
   const gameManager = new GameManager();
 
   return Scene({
     id: "game",
-    children: [hero, platform],
+    children: [hero, ...platforms],
     update: function () {
-      gameManager.update(hero, [platform]);
+      gameManager.update(hero, platforms);
       this.children.forEach((child) => child.update());
     },
     render: function () {
