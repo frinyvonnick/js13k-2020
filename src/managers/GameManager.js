@@ -16,28 +16,70 @@ export class GameManager {
           }
         } else {
           if (doesHeroComeFromRight(hero, object)) {
-            const heroYAtCollisionTime = getBottomLeftFromHeroAtCollisionTime(
+            const heroBottomYAtCollisionTime = getBottomLeftFromHeroAtCollisionTime(
               hero,
               futureFrame,
               object
             );
-            if (heroYAtCollisionTime >= object.y) {
+            const heroTopYAtCollisionTime = getBottomLeftFromHeroAtCollisionTime(
+              hero,
+              futureFrame,
+              object
+            );
+            if (heroBottomYAtCollisionTime >= object.y) {
               preventHeroFromFalling(hero, object);
-            }
+            } else if (heroTopYAtCollisionTime < object.y + object.height) {
+              preventHeroFromGoingUpper(hero, object);
+            } 
           } else {
             const heroYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
               hero,
               futureFrame,
               object
             );
-            if (heroYAtCollisionTime >= object.y) {
+            const heroTopYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
+              hero,
+              futureFrame,
+              object
+            );
+            if (heroBottomYAtCollisionTime >= object.y) {
               preventHeroFromFalling(hero, object);
+            } else if (heroTopYAtCollisionTime < object.y + object.height) {
+              preventHeroFromGoingUpper(hero, object);
             }
           }
         }
       }
     });
   }
+}
+
+function getTopLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
+  const xa = hero.x;
+  const ya = hero.y;
+
+  const xb = futureFrame.x;
+  const yb = futureFrame.y;
+
+  return getContactYWithLinearFunction(
+    { xa, ya },
+    { xb, yb },
+    object.x + object.width
+  );
+}
+
+function getTopRightFromHeroAtCollisionTime(hero, futureFrame, object) {
+  const xa = hero.x + hero.width;
+  const ya = hero.y;
+
+  const xb = futureFrame.x + futureFrame.width;
+  const yb = futureFrame.y;
+
+  return getContactYWithLinearFunction(
+    { xa, ya },
+    { xb, yb },
+    object.x
+  );
 }
 
 function getBottomLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
