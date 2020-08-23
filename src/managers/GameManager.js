@@ -3,12 +3,15 @@ import { Sprite, collides } from "kontra";
 const MAX_STAIRS_HEIGHT = 20;
 
 export class GameManager {
+  didCollide = false;
   update(hero, objects) {
     const futureFrame = new Sprite({ ...hero });
     futureFrame.advance();
 
+    let doesCollide = false;
     objects.forEach((object) => {
       if (collides(futureFrame, object)) {
+        doesCollide = true;
         if (doesHeroComeFromTopOrBottom(hero, object)) {
           if (doesHeroComeFromTop(hero, object)) {
             preventHeroFromFalling(hero, object);
@@ -64,6 +67,28 @@ export class GameManager {
         }
       }
     });
+    if (!doesCollide && this.didCollide && hero.dy > 0) {
+      const fallingFrame = new Sprite({ ...hero });
+      fallingFrame.dy = MAX_STAIRS_HEIGHT;
+      fallingFrame.advance();
+
+      const collidingObjects = objects.filter((object) =>
+        collides(fallingFrame, object)
+      );
+
+      if (!collidingObjects.length) return;
+
+      const highestCollidingObject = collidingObjects.reduce(
+        (highestObject, currentObject) => {
+          return currentObject.y > highestObject.y
+            ? currentObject
+            : highestObject;
+        },
+        collidingObjects[0]
+      );
+      goDown(hero, highestCollidingObject);
+    }
+    this.didCollide = doesCollide;
   }
 }
 
@@ -140,6 +165,10 @@ function preventHeroFromFalling(hero, object) {
 }
 
 function climb(hero, object) {
+  preventHeroFromFalling(hero, object);
+}
+
+function goDown(hero, object) {
   preventHeroFromFalling(hero, object);
 }
 
