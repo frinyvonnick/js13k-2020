@@ -10,8 +10,8 @@ export function makePlatforms() {
       height: 50,
     }),
     Sprite({
-      x: 400, // starting x,y position of the sprite
-      y: 10,
+      x: 600, // starting x,y position of the sprite
+      y: 281,
       color: "green", // fill color of the sprite rectangle
       width: 200, // width and height of the sprite rectangle
       height: 50,

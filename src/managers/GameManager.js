@@ -1,5 +1,7 @@
 import { Sprite, collides } from "kontra";
 
+const MAX_STAIRS_HEIGHT = 20;
+
 export class GameManager {
   update(hero, objects) {
     const futureFrame = new Sprite({ ...hero });
@@ -30,7 +32,11 @@ export class GameManager {
             } else if (heroTopYAtCollisionTime > object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
             } else {
-              preventHeroFromGoingLeft(hero, object);
+              if (hero.isGrounded && isObjectClimbable(hero, object)) {
+                climb(hero, object);
+              } else {
+                preventHeroFromGoingLeft(hero, object);
+              }
             }
           } else {
             const heroBottomYAtCollisionTime = getBottomRightFromHeroAtCollisionTime(
@@ -48,7 +54,11 @@ export class GameManager {
             } else if (heroTopYAtCollisionTime > object.y + object.height) {
               preventHeroFromGoingUpper(hero, object);
             } else {
-              preventHeroFromGoingRight(hero, object);
+              if (hero.isGrounded && isObjectClimbable(hero, object)) {
+                climb(hero, object);
+              } else {
+                preventHeroFromGoingRight(hero, object);
+              }
             }
           }
         }
@@ -129,6 +139,10 @@ function preventHeroFromFalling(hero, object) {
   hero.dy = 0;
 }
 
+function climb(hero, object) {
+  preventHeroFromFalling(hero, object);
+}
+
 function preventHeroFromGoingUpper(hero, object) {
   hero.y = object.y + object.height;
   hero.dy = 0;
@@ -142,4 +156,8 @@ function preventHeroFromGoingLeft(hero, object) {
 function preventHeroFromGoingRight(hero, object) {
   hero.x = object.x - hero.width;
   hero.dx = 0;
+}
+
+function isObjectClimbable(hero, object) {
+  return object.y > hero.y + hero.height - MAX_STAIRS_HEIGHT;
 }
