@@ -4,7 +4,7 @@
   "description": "",
   "main": "code.js",
   "dependencies": {
-    "kontra": "^7.1.0"
+    "kontra": "^7.1.2"
   },
   "devDependencies": {
     "bundlesize": "^0.18.0",

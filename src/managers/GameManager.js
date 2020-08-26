@@ -1,11 +1,11 @@
-import { Sprite, collides } from "kontra";
+import { Sprite, collides, Vector } from "kontra";
 
 const MAX_STAIRS_HEIGHT = 20;
 
 export class GameManager {
   didCollide = false;
   update(hero, objects) {
-    const futureFrame = new Sprite({ ...hero });
+    const futureFrame = cloneFrame(hero);
     futureFrame.advance();
 
     let doesCollide = false;
@@ -68,7 +68,7 @@ export class GameManager {
       }
     });
     if (!doesCollide && this.didCollide && hero.dy > 0) {
-      const fallingFrame = new Sprite({ ...hero });
+      const fallingFrame = cloneFrame(hero);
       fallingFrame.dy = MAX_STAIRS_HEIGHT;
       fallingFrame.advance();
 
@@ -93,11 +93,11 @@ export class GameManager {
 }
 
 function getTopLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
-  const xa = hero.x;
-  const ya = hero.y;
+  const xa = hero.x - hero.width / 2;
+  const ya = hero.y - hero.height / 2;
 
-  const xb = futureFrame.x;
-  const yb = futureFrame.y;
+  const xb = futureFrame.x - futureFrame.width / 2;
+  const yb = futureFrame.y - futureFrame.height / 2;
 
   return getContactYWithLinearFunction(
     { xa, ya },
@@ -107,21 +107,21 @@ function getTopLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
 }
 
 function getTopRightFromHeroAtCollisionTime(hero, futureFrame, object) {
-  const xa = hero.x + hero.width;
-  const ya = hero.y;
+  const xa = hero.x + hero.width / 2;
+  const ya = hero.y - hero.height / 2;
 
-  const xb = futureFrame.x + futureFrame.width;
-  const yb = futureFrame.y;
+  const xb = futureFrame.x + futureFrame.width / 2;
+  const yb = futureFrame.y - futureFrame.height / 2;
 
   return getContactYWithLinearFunction({ xa, ya }, { xb, yb }, object.x);
 }
 
 function getBottomLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
-  const xa = hero.x;
-  const ya = hero.y + hero.height;
+  const xa = hero.x - hero.width / 2;
+  const ya = hero.y + hero.height / 2;
 
-  const xb = futureFrame.x;
-  const yb = futureFrame.y + futureFrame.height;
+  const xb = futureFrame.x - futureFrame.width / 2;
+  const yb = futureFrame.y + futureFrame.height / 2;
 
   return getContactYWithLinearFunction(
     { xa, ya },
@@ -131,11 +131,11 @@ function getBottomLeftFromHeroAtCollisionTime(hero, futureFrame, object) {
 }
 
 function getBottomRightFromHeroAtCollisionTime(hero, futureFrame, object) {
-  const xa = hero.x + hero.width;
-  const ya = hero.y + hero.height;
+  const xa = hero.x + hero.width / 2;
+  const ya = hero.y + hero.height / 2;
 
-  const xb = futureFrame.x + futureFrame.width;
-  const yb = futureFrame.y + futureFrame.height;
+  const xb = futureFrame.x + futureFrame.width / 2;
+  const yb = futureFrame.y + futureFrame.height / 2;
 
   return getContactYWithLinearFunction({ xa, ya }, { xb, yb }, object.x);
 }
@@ -147,20 +147,23 @@ function getContactYWithLinearFunction({ xa, ya }, { xb, yb }, contactX) {
 }
 
 function doesHeroComeFromTopOrBottom(hero, object) {
-  return hero.x + hero.width > object.x && hero.x < object.x + object.width;
+  return (
+    hero.x + hero.width / 2 > object.x &&
+    hero.x - hero.width / 2 < object.x + object.width
+  );
 }
 
 function doesHeroComeFromTop(hero, object) {
-  return hero.y < object.y;
+  return hero.y - hero.height / 2 < object.y;
 }
 
 function doesHeroComeFromRight(hero, object) {
-  return hero.x >= object.x + object.width;
+  return hero.x - hero.width / 2 >= object.x + object.width;
 }
 
 function preventHeroFromFalling(hero, object) {
   hero.isGrounded = true;
-  hero.y = object.y - hero.height;
+  hero.y = object.y - hero.height / 2;
   hero.dy = 0;
 }
 
@@ -173,20 +176,28 @@ function goDown(hero, object) {
 }
 
 function preventHeroFromGoingUpper(hero, object) {
-  hero.y = object.y + object.height;
+  hero.y = object.y + object.height + hero.height / 2;
   hero.dy = 0;
 }
 
 function preventHeroFromGoingLeft(hero, object) {
-  hero.x = object.x + object.width;
+  hero.x = object.x + object.width + hero.width / 2;
   hero.dx = 0;
 }
 
 function preventHeroFromGoingRight(hero, object) {
-  hero.x = object.x - hero.width;
+  hero.x = object.x - hero.width / 2;
   hero.dx = 0;
 }
 
 function isObjectClimbable(hero, object) {
-  return object.y > hero.y + hero.height - MAX_STAIRS_HEIGHT;
+  return object.y > hero.y + hero.height / 2 - MAX_STAIRS_HEIGHT;
+}
+
+function cloneFrame(frame) {
+  const clonedFrame = new Sprite({ ...frame });
+  clonedFrame.position = Vector(frame.position.x, frame.position.y);
+  clonedFrame.velocity = Vector(frame.velocity.x, frame.velocity.y);
+  clonedFrame.acceleration = Vector(frame.acceleration.x, frame.acceleration.y);
+  return clonedFrame;
 }
