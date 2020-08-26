@@ -6,18 +6,18 @@ const { canvas } = init();
 
 initKeys();
 
-const scene = makeMainScene();
+makeMainScene().then((scene) => {
+  const loop = GameLoop({
+    // create the main game loop
+    update: function () {
+      // update the game state
+      scene.update();
+    },
+    render: function () {
+      // render the game state
+      scene.render();
+    },
+  });
 
-const loop = GameLoop({
-  // create the main game loop
-  update: function () {
-    // update the game state
-    scene.update();
-  },
-  render: function () {
-    // render the game state
-    scene.render();
-  },
+  loop.start(); // start the game
 });
-
-loop.start(); // start the game
