@@ -3,6 +3,7 @@ import spritesheet from "../assets/spritesheet-heros.png";
 
 const MAX_SPEED = 10;
 const JUMP_SPEED = 8;
+const DOUBLE_JUMP_SPEED = 10;
 const MIN_JUMP_FRAMES = 4;
 const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6
@@ -57,6 +58,7 @@ export function makeHero() {
           isGrounded: false,
           isJumping: false,
           stillJumping: false,
+          hasDoubleJump: false,
           handleJump: function () {
             if (this.jumpFrames < MIN_JUMP_FRAMES && keyPressed("space")) {
               this.isJumping = true;
@@ -72,6 +74,11 @@ export function makeHero() {
               this.stillJumping = false;
             if (!this.isGrounded)
               this.jumpFrames++;
+
+            if (this.dy > GRAVITY && this.hasDoubleJump && keyPressed("space") && !this.stillJumping) {
+              this.dy = -DOUBLE_JUMP_SPEED;
+              this.hasDoubleJump = false;
+            }
 
             this.isGrounded = false;
           },
@@ -115,6 +122,7 @@ export function makeHero() {
           },
           touchesGround: function () {
             this.isGrounded = true;
+            this.hasDoubleJump = true;
             this.jumpFrames = 0;
             this.isJumping = false;
           },
