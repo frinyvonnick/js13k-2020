@@ -5,13 +5,16 @@ import drawHero from "./HeroAnimation";
 import { CLOAK, BOOTS } from "./HeroInventory" 
 
 const MAX_SPEED = 10;
+const MOVEMENT_SPEED = 3;
+const MAX_MOVEMENT_SPEED = 4;
+const MOVEMENT_ACCELERATION = 0.4;
+const MOVEMENT_FRICTION = 0.5;
 const JUMP_SPEED = 8;
 const DOUBLE_JUMP_SPEED = 10;
 const MIN_JUMP_FRAMES = 4;
 const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
-const MOVEMENT_SPEED = 3;
 
 export function makeHero() {
   return Sprite({
@@ -113,16 +116,19 @@ export function makeHero() {
       this.isGrounded = false;
     },
     handleMovement: function () {
-      this.dx = 0;
       if (keyPressed("q")) {
-        this.dx = -MOVEMENT_SPEED;
+        this.ddx = -MOVEMENT_ACCELERATION;
+      } else if (keyPressed("d")) {
+        this.ddx = MOVEMENT_ACCELERATION;
+      } else {
+        if (Math.abs(this.dx) <= MOVEMENT_FRICTION) {
+          this.dx = 0;
+          this.ddx = 0;
+        } else {
+          this.ddx = MOVEMENT_FRICTION * -Math.sign(this.dx);
+        }
       }
-      if (keyPressed("d")) {
-        this.dx = MOVEMENT_SPEED;
-      }
-
-      // Limit speed
-      this.dx = clamp(-MAX_SPEED, MAX_SPEED, this.dx);
+      this.dx = clamp(-MAX_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED, this.dx);
       this.dy = clamp(-MAX_SPEED, MAX_SPEED, this.dy);
     },
     update: function (dt) {

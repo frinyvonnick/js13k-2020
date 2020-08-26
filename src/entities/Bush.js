@@ -32,8 +32,8 @@ export const makeEntity = function (props = defaultValues) {
 export function render() {
   const shadowFoliageRadius = Math.round(this.height / 2);
   const foliageRadius = this.height;
-  this.width = foliageRadius * 2 + shadowFoliageRadius
-    this.context.beginPath();
+  this.width = foliageRadius * 2 + shadowFoliageRadius;
+  this.context.beginPath();
   this.context.filter = `blur(${this.blur}px)`;
 
   this.context.fillStyle = this.foliageShadowColor;

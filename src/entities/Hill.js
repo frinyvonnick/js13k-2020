@@ -19,7 +19,6 @@ export const makeEntity = function (props = defaultValues) {
   const width = props.hillWidth * 0.5;
   const height = props.hillHeight * 0.5;
 
-
   return Sprite({
     ...props,
     type: "Hill",

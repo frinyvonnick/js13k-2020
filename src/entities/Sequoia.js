@@ -31,4 +31,3 @@ export function render() {
   this.context.rect(0, 0, this.width, this.height);
   this.context.fill();
 }
-
