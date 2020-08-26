@@ -7,6 +7,8 @@ const DOUBLE_JUMP_SPEED = 10;
 const MIN_JUMP_FRAMES = 4;
 const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6
+const GLIDE_SPEED = 0.2;
+const MOVEMENT_SPEED = 3;
 
 export function makeHero() {
   return new Promise(function (resolve, reject) {
@@ -75,9 +77,13 @@ export function makeHero() {
             if (!this.isGrounded)
               this.jumpFrames++;
 
-            if (this.dy > GRAVITY && this.hasDoubleJump && keyPressed("space") && !this.stillJumping) {
-              this.dy = -DOUBLE_JUMP_SPEED;
-              this.hasDoubleJump = false;
+            if (this.dy > GRAVITY && keyPressed("space")) {
+              if (!this.stillJumping && this.hasDoubleJump) {
+                this.dy = -DOUBLE_JUMP_SPEED;
+                this.hasDoubleJump = false;
+              } else {
+                this.dy = GLIDE_SPEED;
+              }
             }
 
             this.isGrounded = false;
@@ -85,10 +91,10 @@ export function makeHero() {
           handleMovement: function () {
             this.dx = 0;
             if (keyPressed("q")) {
-              this.dx = -2;
+              this.dx = -MOVEMENT_SPEED;
             }
             if (keyPressed("d")) {
-              this.dx = 2;
+              this.dx = MOVEMENT_SPEED;
             }
 
             // Limit speed
