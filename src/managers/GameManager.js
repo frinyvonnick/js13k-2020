@@ -162,7 +162,7 @@ function doesHeroComeFromRight(hero, object) {
 }
 
 function preventHeroFromFalling(hero, object) {
-  hero.isGrounded = true;
+  hero.touchesGround();
   hero.y = object.y - hero.height / 2;
   hero.dy = 0;
 }

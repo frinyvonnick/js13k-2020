@@ -2,6 +2,10 @@ import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 import spritesheet from "../assets/spritesheet-heros.png";
 
 const MAX_SPEED = 10;
+const JUMP_SPEED = 8;
+const MIN_JUMP_FRAMES = 4;
+const MAX_JUMP_FRAMES = 15;
+const GRAVITY = 0.6
 
 export function makeHero() {
   return new Promise(function (resolve, reject) {
@@ -47,13 +51,28 @@ export function makeHero() {
           y: 10,
           width: 10, // width and height of the sprite rectangle
           height: 112 / 3,
-          isGrounded: false,
           dx: 0, // move the sprite 2px to the right every frame
           children: [animationSprite],
+          jumpFrames: 0,
+          isGrounded: false,
+          isJumping: false,
+          stillJumping: false,
           handleJump: function () {
-            if (this.isGrounded && keyPressed("space")) {
-              this.dy = -MAX_SPEED;
+            if (this.jumpFrames < MIN_JUMP_FRAMES && keyPressed("space")) {
+              this.isJumping = true;
+              this.stillJumping = true;
             }
+            if (this.isJumping) {
+              if (this.jumpFrames < MIN_JUMP_FRAMES ||
+                 (this.jumpFrames < MAX_JUMP_FRAMES && this.stillJumping)) {
+                this.dy = -JUMP_SPEED;
+              }
+            }
+            if (!keyPressed("space"))
+              this.stillJumping = false;
+            if (!this.isGrounded)
+              this.jumpFrames++;
+
             this.isGrounded = false;
           },
           handleMovement: function () {
@@ -72,7 +91,7 @@ export function makeHero() {
           update: function () {
             this.advance();
 
-            this.ddy = 0.4;
+            this.ddy = GRAVITY;
 
             this.handleJump();
             this.handleMovement();
@@ -84,15 +103,20 @@ export function makeHero() {
             }
 
             const animationSprite = this.children[0]
-            if (this.dx === 0 && this.dy === 0.4) {
+            if (this.dx === 0 && this.dy === GRAVITY) {
               animationSprite.playAnimation("idle");
-            } else if (this.dy === 0.4) {
+            } else if (this.dy === GRAVITY) {
               animationSprite.playAnimation("run");
-            } else if (this.dy < 0.4) {
+            } else if (this.dy < GRAVITY) {
               animationSprite.playAnimation("jump");
-            } else if (this.dy > 0.4) {
+            } else if (this.dy > GRAVITY) {
               animationSprite.playAnimation("fall");
             }
+          },
+          touchesGround: function () {
+            this.isGrounded = true;
+            this.jumpFrames = 0;
+            this.isJumping = false;
           },
         })
       );
