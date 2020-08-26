@@ -1,11 +1,11 @@
-import { Sprite, collides } from "kontra";
+import { Sprite, collides, Vector } from "kontra";
 
 const MAX_STAIRS_HEIGHT = 20;
 
 export class GameManager {
   didCollide = false;
   update(hero, objects) {
-    const futureFrame = new Sprite({ ...hero });
+    const futureFrame = cloneFrame(hero);
     futureFrame.advance();
 
     let doesCollide = false;
@@ -68,7 +68,7 @@ export class GameManager {
       }
     });
     if (!doesCollide && this.didCollide && hero.dy > 0) {
-      const fallingFrame = new Sprite({ ...hero });
+      const fallingFrame = cloneFrame(hero);
       fallingFrame.dy = MAX_STAIRS_HEIGHT;
       fallingFrame.advance();
 
@@ -147,7 +147,10 @@ function getContactYWithLinearFunction({ xa, ya }, { xb, yb }, contactX) {
 }
 
 function doesHeroComeFromTopOrBottom(hero, object) {
-  return hero.x + hero.width / 2 > object.x && hero.x - hero.width / 2 < object.x + object.width;
+  return (
+    hero.x + hero.width / 2 > object.x &&
+    hero.x - hero.width / 2 < object.x + object.width
+  );
 }
 
 function doesHeroComeFromTop(hero, object) {
@@ -189,4 +192,12 @@ function preventHeroFromGoingRight(hero, object) {
 
 function isObjectClimbable(hero, object) {
   return object.y > hero.y + hero.height / 2 - MAX_STAIRS_HEIGHT;
+}
+
+function cloneFrame(frame) {
+  const clonedFrame = new Sprite({ ...frame });
+  clonedFrame.position = Vector(frame.position.x, frame.position.y);
+  clonedFrame.velocity = Vector(frame.velocity.x, frame.velocity.y);
+  clonedFrame.acceleration = Vector(frame.acceleration.x, frame.acceleration.y);
+  return clonedFrame;
 }
