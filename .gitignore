@@ -108,3 +108,6 @@ dist
 
 # zip file
 submission.zip
+
+# Linux users
+*.swp
