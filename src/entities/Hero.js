@@ -2,6 +2,9 @@ import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 import spritesheet from "../assets/spritesheet-heros.png";
 
 const MAX_SPEED = 10;
+const MAX_MOVEMENT_SPEED = 4;
+const MOVEMENT_ACCELERATION = 0.4;
+const MOVEMENT_FRICTION = 0.5;
 
 export function makeHero() {
   return new Promise(function (resolve, reject) {
@@ -38,7 +41,7 @@ export function makeHero() {
         width: 50, // width and height of the sprite rectangle
         height: 175 / 3,
         animations: spritesheet.animations,
-      })
+      });
 
       resolve(
         Sprite({
@@ -57,16 +60,21 @@ export function makeHero() {
             this.isGrounded = false;
           },
           handleMovement: function () {
-            this.dx = 0;
             if (keyPressed("q")) {
-              this.dx = -2;
-            }
-            if (keyPressed("d")) {
-              this.dx = 2;
+              this.ddx = -MOVEMENT_ACCELERATION;
+            } else if (keyPressed("d")) {
+              this.ddx = MOVEMENT_ACCELERATION;
+            } else {
+              if (Math.abs(this.dx) <= MOVEMENT_FRICTION) {
+                this.dx = 0;
+                this.ddx = 0;
+              } else {
+                this.ddx = MOVEMENT_FRICTION * -signOf(this.dx);
+              }
             }
 
             // Limit speed
-            this.dx = clamp(-MAX_SPEED, MAX_SPEED, this.dx);
+            this.dx = clamp(-MAX_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED, this.dx);
             this.dy = clamp(-MAX_SPEED, MAX_SPEED, this.dy);
           },
           update: function () {
@@ -78,12 +86,12 @@ export function makeHero() {
             this.handleMovement();
 
             if (this.dx > 0) {
-              this.scaleX = 1
+              this.scaleX = 1;
             } else if (this.dx < 0) {
-              this.scaleX = -1
+              this.scaleX = -1;
             }
 
-            const animationSprite = this.children[0]
+            const animationSprite = this.children[0];
             if (this.dx === 0 && this.dy === 0.4) {
               animationSprite.playAnimation("idle");
             } else if (this.dy === 0.4) {
@@ -98,4 +106,9 @@ export function makeHero() {
       );
     };
   });
+}
+
+function signOf(n) {
+  if (n < 0) return -1;
+  return 1;
 }
