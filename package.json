@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "bundlesize": "^0.18.0",
-    "concurrently": "^5.3.0",
     "cross-env": "^7.0.2",
     "jszip-cli": "^1.4.24",
     "nodemon": "^2.0.4",
@@ -18,7 +17,7 @@
   },
   "scripts": {
     "dev": "parcel src/index.html",
-    "design": "concurrently \"nodemon ./utils/design-server.js\" \"cross-env NODE_ENV=design parcel src/index.html\"",
+    "design": "nodemon ./utils/design-server.js & cross-env NODE_ENV=design parcel utils/index.html",
     "build": "parcel build src/index.html --no-source-maps --experimental-scope-hoisting --public-url ./",
     "serve": "serve dist",
     "zip": "zip -r submission.zip dist",
