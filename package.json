@@ -22,7 +22,7 @@
     "serve": "serve dist",
     "zip": "zip -r submission.zip dist",
     "size": "bundlesize",
-    "format": "prettier --write src"
+    "format": "prettier --write src utils"
   },
   "bundlesize": [
     {

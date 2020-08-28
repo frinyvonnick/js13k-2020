@@ -1,4 +1,4 @@
-import { Scene, Sprite, getPointer, onPointerDown } from "kontra";
+import { Scene, Sprite, getPointer, onPointerDown, Vector } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
 
@@ -9,12 +9,7 @@ export function makeDesignScene() {
       anchor: { x: 0.5, y: 0.5 },
     });
 
-    onPointerDown(function (e, object) {
-      const { x, y } = getPointer();
-      console.log("click", { x, y });
-    });
-
-    return Scene({
+    const scene = Scene({
       id: "game",
       children: [sprite],
       update: () => {
@@ -23,5 +18,19 @@ export function makeDesignScene() {
         sprite.y = pointer.y;
       },
     });
+
+    onPointerDown(function (e, object) {
+      const { x, y } = getPointer();
+      scene.addChild(cloneSprite(sprite));
+      console.log("click", { x, y });
+    });
+
+    return scene;
   });
+}
+
+function cloneSprite(sprite) {
+  const clonedSprite = new Sprite({ ...sprite });
+  clonedSprite.position = Vector(sprite.position.x, sprite.position.y);
+  return clonedSprite;
 }
