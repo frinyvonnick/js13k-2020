@@ -10,11 +10,6 @@ initPointer();
 
 console.log("isDesignMode", isDesignMode);
 
-console.log("load entities");
-fetch("http://localhost:7000")
-  .then((res) => res.json())
-  .then(console.log);
-
 Promise.all([makeDesignScene()]).then(([designScene]) => {
   const loop = GameLoop({
     // create the main game loop

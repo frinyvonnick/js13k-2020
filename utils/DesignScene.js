@@ -10,13 +10,10 @@ import {
 import * as Ground from "../src/entities/Ground";
 
 export function makeDesignScene() {
-  return Promise.all([]).then(([]) => {
-    const entities = [];
+  return Promise.all([load()]).then(([savedEntities]) => {
+    const entities = [...savedEntities];
 
-    const sprite = Ground.makeEntity({
-      ...Ground.defaultValues,
-      anchor: { x: 0.5, y: 0.5 },
-    });
+    const sprite = Ground.makeEntity(Ground.defaultValues);
 
     const scene = Scene({
       id: "game",
@@ -36,6 +33,7 @@ export function makeDesignScene() {
       },
     });
 
+    entities.forEach(entity => scene.addChild(new Sprite({ ...entity })));
     onPointerDown(function (e, object) {
       const { x, y } = getPointer();
       scene.addChild(cloneSprite(sprite));
@@ -59,4 +57,9 @@ function save(entities) {
   })
     .then((res) => res.text())
     .then(console.log);
+}
+
+function load() {
+  return fetch("http://localhost:7000")
+  .then((res) => res.json())
 }
