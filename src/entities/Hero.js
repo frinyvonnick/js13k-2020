@@ -6,7 +6,7 @@ const JUMP_SPEED = 8;
 const DOUBLE_JUMP_SPEED = 10;
 const MIN_JUMP_FRAMES = 4;
 const MAX_JUMP_FRAMES = 15;
-const GRAVITY = 0.6
+const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
 const MOVEMENT_SPEED = 3;
 
@@ -45,40 +45,52 @@ export function makeHero() {
         width: 160 / 5, // width and height of the sprite rectangle
         height: 112 / 3,
         animations: spritesheet.animations,
-      })
+      });
 
       resolve(
         Sprite({
           anchor: { x: 0.5, y: 0.5 },
-          x: 100, // starting x,y position of the sprite
+          x: 100,
           y: 10,
-          width: 10, // width and height of the sprite rectangle
+          width: 10,
           height: 112 / 3,
-          dx: 0, // move the sprite 2px to the right every frame
+          dx: 0,
           children: [animationSprite],
           jumpFrames: 0,
           isGrounded: false,
           isJumping: false,
           stillJumping: false,
           hasDoubleJump: false,
+          isPerformingJump: function () {
+            // QOL : Allows player to jump off a cliff a few frames too late
+            return this.jumpFrames < MIN_JUMP_FRAMES && keyPressed("space");
+          },
+          isStillAscending: function () {
+            return (
+              this.isJumping &&
+              (this.jumpFrames < MIN_JUMP_FRAMES ||
+                (this.jumpFrames < MAX_JUMP_FRAMES && this.stillJumping))
+            );
+          },
+          canDoubleJump: function () {
+            return !this.stillJumping && this.hasDoubleJump;
+          },
+          isBreakingFall: function () {
+            return this.dy > GRAVITY && keyPressed("space");
+          },
           handleJump: function () {
-            if (this.jumpFrames < MIN_JUMP_FRAMES && keyPressed("space")) {
+            if (this.isPerformingJump()) {
               this.isJumping = true;
               this.stillJumping = true;
             }
-            if (this.isJumping) {
-              if (this.jumpFrames < MIN_JUMP_FRAMES ||
-                 (this.jumpFrames < MAX_JUMP_FRAMES && this.stillJumping)) {
-                this.dy = -JUMP_SPEED;
-              }
+            if (this.isStillAscending()) {
+              this.dy = -JUMP_SPEED;
             }
-            if (!keyPressed("space"))
-              this.stillJumping = false;
-            if (!this.isGrounded)
-              this.jumpFrames++;
+            if (!keyPressed("space")) this.stillJumping = false;
+            if (!this.isGrounded) this.jumpFrames++;
 
-            if (this.dy > GRAVITY && keyPressed("space")) {
-              if (!this.stillJumping && this.hasDoubleJump) {
+            if (this.isBreakingFall()) {
+              if (this.canDoubleJump()) {
                 this.dy = -DOUBLE_JUMP_SPEED;
                 this.hasDoubleJump = false;
               } else {
@@ -110,12 +122,12 @@ export function makeHero() {
             this.handleMovement();
 
             if (this.dx > 0) {
-              this.scaleX = 1
+              this.scaleX = 1;
             } else if (this.dx < 0) {
-              this.scaleX = -1
+              this.scaleX = -1;
             }
 
-            const animationSprite = this.children[0]
+            const animationSprite = this.children[0];
             if (this.dx === 0 && this.dy === GRAVITY) {
               animationSprite.playAnimation("idle");
             } else if (this.dy === GRAVITY) {
