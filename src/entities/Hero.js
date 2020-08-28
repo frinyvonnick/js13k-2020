@@ -11,8 +11,8 @@ export function makeHero() {
     image.onload = function () {
       const spritesheet = SpriteSheet({
         image,
-        frameWidth: 250 / 5,
-        frameHeight: 175 / 3,
+        frameWidth: 160 / 5,
+        frameHeight: 112 / 3,
         animations: {
           run: {
             frames: [3, "5..7"],
@@ -35,8 +35,8 @@ export function makeHero() {
 
       const animationSprite = Sprite({
         anchor: { x: 0.5, y: 0.5 },
-        width: 50, // width and height of the sprite rectangle
-        height: 175 / 3,
+        width: 160 / 5, // width and height of the sprite rectangle
+        height: 112 / 3,
         animations: spritesheet.animations,
       })
 
@@ -45,8 +45,8 @@ export function makeHero() {
           anchor: { x: 0.5, y: 0.5 },
           x: 100, // starting x,y position of the sprite
           y: 10,
-          width: 20, // width and height of the sprite rectangle
-          height: 175 / 3,
+          width: 10, // width and height of the sprite rectangle
+          height: 112 / 3,
           isGrounded: false,
           dx: 0, // move the sprite 2px to the right every frame
           children: [animationSprite],
