@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import {
   Scene,
   Sprite,
@@ -5,13 +6,14 @@ import {
   onPointerDown,
   Vector,
   keyPressed,
+  track,
 } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
 
 export function makeDesignScene() {
   return Promise.all([load()]).then(([savedEntities]) => {
-    const entities = [...savedEntities];
+    let entities = [...savedEntities];
 
     const sprite = Ground.makeEntity(Ground.defaultValues);
 
@@ -19,7 +21,9 @@ export function makeDesignScene() {
       id: "game",
       children: [sprite],
       hasPressedSave: false,
-      update: function() {
+      isEditMode: false,
+      selectedSprite: null,
+      update: function () {
         const pointer = getPointer();
         sprite.x = pointer.x;
         sprite.y = pointer.y;
@@ -30,22 +34,67 @@ export function makeDesignScene() {
           this.hasPressedSave = false;
           save(entities);
         }
+
+        if (keyPressed("e")) {
+          this.isEditMode = true;
+        }
+
+        if (keyPressed("a")) {
+          this.isEditMode = false;
+          this.selectedSprite = null;
+        }
+
+        if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
+          this.removeChild(this.selectedSprite);
+          entities = entities.filter(
+            (entity) => entity.id !== this.selectedSprite.id
+          );
+          this.selectedSprite = null;
+        }
+
+        const spriteToAdd = this.children.find((child) => !child.id);
+
+        if (this.isEditMode) {
+          spriteToAdd.opacity = 0;
+        } else {
+          spriteToAdd.opacity = 1;
+        }
       },
     });
 
-    entities.forEach(entity => scene.addChild(new Sprite({ ...entity })));
+    function selectSprite() {
+      if (scene.isEditMode) {
+        scene.selectedSprite = this;
+      }
+    }
+
+    entities.forEach((entity) => {
+      const newSprite = makeSprite(entity, selectSprite);
+      scene.addChild(newSprite);
+      entity.id = newSprite.id;
+    });
+
     onPointerDown(function (e, object) {
-      const { x, y } = getPointer();
-      scene.addChild(cloneSprite(sprite));
-      entities.push({ ...Ground.defaultValues, x, y });
+      if (!scene.isEditMode) {
+        const { x, y } = getPointer();
+        const newSprite = cloneSprite(sprite, selectSprite);
+        scene.addChild(newSprite);
+        entities.push({ ...Ground.defaultValues, x, y, id: newSprite.id });
+      }
     });
 
     return scene;
   });
 }
 
-function cloneSprite(sprite) {
-  const clonedSprite = new Sprite({ ...sprite });
+function makeSprite(props, onDown) {
+  const newSprite = new Sprite({ ...props, id: uuidv4(), onDown });
+  track(newSprite);
+  return newSprite;
+}
+
+function cloneSprite(sprite, onDown) {
+  const clonedSprite = makeSprite(sprite, onDown);
   clonedSprite.position = Vector(sprite.position.x, sprite.position.y);
   return clonedSprite;
 }
@@ -60,6 +109,5 @@ function save(entities) {
 }
 
 function load() {
-  return fetch("http://localhost:7000")
-  .then((res) => res.json())
+  return fetch("http://localhost:7000").then((res) => res.json());
 }
