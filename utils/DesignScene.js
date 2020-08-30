@@ -12,6 +12,8 @@ import {
 import * as Ground from "../src/entities/Ground";
 import * as Circle from "../src/entities/Circle";
 
+const CAMERA_SPEED = 10;
+const ZOOM_SPEED = 0.95;
 const availableEntities = {
   Ground,
   Circle,
@@ -33,6 +35,7 @@ export function makeDesignScene() {
       children: [sprite],
       hasPressed: {},
       isEditMode: false,
+      isRoundedPlacement: false,
       selectedSprite: null,
       selectedAvailableEntityIndex: 0,
       getSpriteToAdd: function () {
@@ -52,8 +55,13 @@ export function makeDesignScene() {
       update: function () {
         const pointer = getPointer();
         const spriteToAdd = this.getSpriteToAdd();
-        spriteToAdd.x = pointer.x;
-        spriteToAdd.y = pointer.y;
+        spriteToAdd.x = (pointer.x + this.sx) / this.scaleX;
+        spriteToAdd.y = (pointer.y + this.sy) / this.scaleX;
+
+        if (this.isRoundedPlacement) {
+          spriteToAdd.x = Math.round(spriteToAdd.x);
+          spriteToAdd.y = Math.round(spriteToAdd.y);
+        }
 
         if (this.isEditMode) {
           spriteToAdd.opacity = 0;
@@ -80,6 +88,39 @@ export function makeDesignScene() {
         onRelease(this, "p", () => {
           selectPreviousEntity();
         });
+
+        onRelease(this, "c", () => {
+          if (this.isEditMode)
+            this.isRoundedPlacement = !this.isRoundedPlacement;
+        });
+
+        const MOVE_SPEED = CAMERA_SPEED / this.scaleX;
+        if (keyPressed("left")) {
+          this.camera.x -= MOVE_SPEED;
+          console.log("scale : ", this.scaleX, "cam speed : ", MOVE_SPEED);
+        }
+
+        if (keyPressed("up")) {
+          this.camera.y -= MOVE_SPEED;
+        }
+
+        if (keyPressed("right")) {
+          this.camera.x += MOVE_SPEED;
+        }
+
+        if (keyPressed("down")) {
+          this.camera.y += MOVE_SPEED;
+        }
+
+        if (keyPressed("i")) {
+          this.scaleX *= ZOOM_SPEED;
+          this.scaleY *= ZOOM_SPEED;
+        }
+
+        if (keyPressed("o")) {
+          this.scaleX /= ZOOM_SPEED;
+          this.scaleY /= ZOOM_SPEED;
+        }
 
         if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
           removeSelectedSprite();
