@@ -7,5 +7,8 @@ export const defaultValues = {
 };
 
 export const makeEntity = function (props = defaultValues) {
-  return Sprite(props);
+  return Sprite({
+    ...props,
+    type: 'Ground',
+  });
 };

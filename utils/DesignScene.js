@@ -10,12 +10,23 @@ import {
 } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
+import * as Circle from "../src/entities/Circle";
+
+const availableEntities = {
+  Ground,
+  Circle,
+};
+
+const availableEntityTypes = Object.keys(availableEntities);
 
 export function makeDesignScene() {
   return Promise.all([load()]).then(([savedEntities]) => {
     let entities = [...savedEntities];
 
-    const sprite = Ground.makeEntity(Ground.defaultValues);
+    const firstAvailableEntity = availableEntities[availableEntityTypes[0]];
+    const sprite = firstAvailableEntity.makeEntity(
+      firstAvailableEntity.defaultValues
+    );
 
     const scene = Scene({
       id: "game",
@@ -23,10 +34,26 @@ export function makeDesignScene() {
       hasPressedSave: false,
       isEditMode: false,
       selectedSprite: null,
+      selectedAvailableEntityIndex: 0,
+      getSpriteToAdd: function () {
+        return this.children.find((child) => !child.id);
+      },
+      changeSelectedAvailableEntity: function () {
+        this.removeChild(this.getSpriteToAdd());
+        const availableEntity =
+          availableEntities[
+            availableEntityTypes[this.selectedAvailableEntityIndex]
+          ];
+        const newSpriteToAdd = availableEntity.makeEntity(
+          availableEntity.defaultValues
+        );
+        this.addChild(newSpriteToAdd);
+      },
       update: function () {
         const pointer = getPointer();
-        sprite.x = pointer.x;
-        sprite.y = pointer.y;
+        const spriteToAdd = this.getSpriteToAdd();
+        spriteToAdd.x = pointer.x;
+        spriteToAdd.y = pointer.y;
 
         if (keyPressed("s")) {
           this.hasPressedSave = true;
@@ -45,6 +72,23 @@ export function makeDesignScene() {
           document.querySelector("form").remove();
         }
 
+        if (keyPressed("n")) {
+          if (
+            this.selectedAvailableEntityIndex + 1 <
+            availableEntityTypes.length
+          ) {
+            this.selectedAvailableEntityIndex++;
+            this.changeSelectedAvailableEntity();
+          }
+        }
+
+        if (keyPressed("p")) {
+          if (this.selectedAvailableEntityIndex - 1 >= 0) {
+            this.selectedAvailableEntityIndex--;
+            this.changeSelectedAvailableEntity();
+          }
+        }
+
         if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
           this.removeChild(this.selectedSprite);
           entities = entities.filter(
@@ -53,8 +97,6 @@ export function makeDesignScene() {
           this.selectedSprite = null;
           document.querySelector("form").remove();
         }
-
-        const spriteToAdd = this.children.find((child) => !child.id);
 
         if (this.isEditMode) {
           spriteToAdd.opacity = 0;
@@ -65,10 +107,11 @@ export function makeDesignScene() {
     });
 
     function selectSprite() {
+      console.log('selectedSprite', this.id)
       if (scene.isEditMode) {
         scene.selectedSprite = this;
 
-        const alreadyExistingForm = document.querySelector("form")
+        const alreadyExistingForm = document.querySelector("form");
         if (alreadyExistingForm) {
           alreadyExistingForm.remove();
         }
@@ -77,19 +120,21 @@ export function makeDesignScene() {
 
         form.style.backgroundColor = "#ddd";
 
-        Object.keys(Ground.defaultValues).forEach((field) => {
+        Object.keys(availableEntities[this.type].defaultValues).forEach((field) => {
           const group = document.createElement("div");
 
           const label = document.createElement("label");
           label.innerHTML = field;
 
           const input = document.createElement("input");
-          input.value = this[field]
-          input.oninput = function(e) {
-            const value = e.target.value
-            scene.selectedSprite[field] = value
-            entities.find(entity => entity.id === scene.selectedSprite.id)[field] = value
-          }
+          input.value = this[field];
+          input.oninput = function (e) {
+            const value = e.target.value;
+            scene.selectedSprite[field] = value;
+            entities.find((entity) => entity.id === scene.selectedSprite.id)[
+              field
+            ] = value;
+          };
 
           group.appendChild(label);
           group.appendChild(input);
@@ -109,9 +154,17 @@ export function makeDesignScene() {
     onPointerDown(function (e, object) {
       if (!scene.isEditMode) {
         const { x, y } = getPointer();
-        const newSprite = cloneSprite(sprite, selectSprite);
+        const newSprite = cloneSprite(scene.getSpriteToAdd(), selectSprite);
         scene.addChild(newSprite);
-        entities.push({ ...Ground.defaultValues, x, y, id: newSprite.id });
+        const type = availableEntityTypes[scene.selectedAvailableEntityIndex];
+        const entity = availableEntities[type];
+        entities.push({
+          ...entity.defaultValues,
+          x,
+          y,
+          id: newSprite.id,
+          type,
+        });
       }
     });
 
@@ -120,7 +173,14 @@ export function makeDesignScene() {
 }
 
 function makeSprite(props, onDown) {
-  const newSprite = new Sprite({ ...props, id: uuidv4(), onDown });
+  const entity = availableEntities[props.type];
+  const newSprite = new Sprite({
+    ...entity.makeEntity(props),
+    id: uuidv4(),
+    render: entity.render,
+    update: entity.update,
+    onDown,
+  });
   track(newSprite);
   return newSprite;
 }
