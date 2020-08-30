@@ -83,21 +83,21 @@ export function makeDesignScene() {
           selectPreviousEntity();
         });
 
-        const MOVE_SPEED = CAMERA_SPEED / this.scaleX;
+        const moveSpeed = CAMERA_SPEED / this.scaleX;
         if (keyPressed("left")) {
-          this.camera.x -= MOVE_SPEED;
+          this.camera.x -= moveSpeed;
         }
 
         if (keyPressed("up")) {
-          this.camera.y -= MOVE_SPEED;
+          this.camera.y -= moveSpeed;
         }
 
         if (keyPressed("right")) {
-          this.camera.x += MOVE_SPEED;
+          this.camera.x += moveSpeed;
         }
 
         if (keyPressed("down")) {
-          this.camera.y += MOVE_SPEED;
+          this.camera.y += moveSpeed;
         }
 
         if (keyPressed("i")) {
@@ -181,21 +181,20 @@ export function makeDesignScene() {
     }
 
     function selectSprite() {
-      console.log("selectedSprite", this.id);
       if (scene.isEditMode) {
         scene.selectedSprite = this;
 
-        createSpriteDetailsForm();
+        createSpriteDetailsForm(this);
       }
     }
 
-    function createSpriteDetailsForm() {
+    function createSpriteDetailsForm(sprite) {
       removeSpriteDetailsForm();
       const form = document.createElement("form");
 
       form.style.backgroundColor = "#ddd";
 
-      Object.keys(availableEntities[this.type].defaultValues).forEach(
+      Object.keys(availableEntities[sprite.type].defaultValues).forEach(
         (field) => {
           const group = document.createElement("div");
 
@@ -203,7 +202,7 @@ export function makeDesignScene() {
           label.innerHTML = field;
 
           const input = document.createElement("input");
-          input.value = this[field];
+          input.value = sprite[field];
           input.oninput = function (e) {
             const value = e.target.value;
             scene.selectedSprite[field] = value;
