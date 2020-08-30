@@ -9,17 +9,20 @@
   "devDependencies": {
     "bundlesize": "^0.18.0",
     "jszip-cli": "^1.4.24",
+    "nodemon": "^2.0.4",
     "parcel-bundler": "^1.12.4",
     "prettier": "2.0.5",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "uuid": "^8.3.0"
   },
   "scripts": {
     "dev": "parcel src/index.html",
+    "design": "nodemon ./utils/design-server.js & parcel utils/index.html",
     "build": "parcel build src/index.html --no-source-maps --experimental-scope-hoisting --public-url ./",
     "serve": "serve dist",
     "zip": "zip -r submission.zip dist",
     "size": "bundlesize",
-    "format": "prettier --write src"
+    "format": "prettier --write src utils"
   },
   "bundlesize": [
     {
