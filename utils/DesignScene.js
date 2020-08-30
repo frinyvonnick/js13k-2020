@@ -42,6 +42,7 @@ export function makeDesignScene() {
         if (keyPressed("a")) {
           this.isEditMode = false;
           this.selectedSprite = null;
+          document.querySelector("form").remove();
         }
 
         if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
@@ -50,6 +51,7 @@ export function makeDesignScene() {
             (entity) => entity.id !== this.selectedSprite.id
           );
           this.selectedSprite = null;
+          document.querySelector("form").remove();
         }
 
         const spriteToAdd = this.children.find((child) => !child.id);
@@ -65,6 +67,36 @@ export function makeDesignScene() {
     function selectSprite() {
       if (scene.isEditMode) {
         scene.selectedSprite = this;
+
+        const alreadyExistingForm = document.querySelector("form")
+        if (alreadyExistingForm) {
+          alreadyExistingForm.remove();
+        }
+
+        const form = document.createElement("form");
+
+        form.style.backgroundColor = "#ddd";
+
+        Object.keys(Ground.defaultValues).forEach((field) => {
+          const group = document.createElement("div");
+
+          const label = document.createElement("label");
+          label.innerHTML = field;
+
+          const input = document.createElement("input");
+          input.value = this[field]
+          input.oninput = function(e) {
+            const value = e.target.value
+            scene.selectedSprite[field] = value
+            entities.find(entity => entity.id === scene.selectedSprite.id)[field] = value
+          }
+
+          group.appendChild(label);
+          group.appendChild(input);
+          form.appendChild(group);
+        });
+
+        document.body.appendChild(form);
       }
     }
 
