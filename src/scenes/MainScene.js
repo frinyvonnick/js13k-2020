@@ -1,10 +1,8 @@
 import { Scene, Sprite } from "kontra";
 
 import { makeHero } from "../entities/Hero.js";
-import { makePlatforms } from "../entities/Platform.js";
 
 import * as Ground from "../entities/Ground";
-import * as Circle from "../entities/Circle";
 
 import { GameManager } from "../managers/GameManager.js";
 
@@ -12,7 +10,6 @@ import entities from "../../utils/entities.json";
 
 const availableEntities = {
   Ground,
-  Circle,
 };
 
 export function makeMainScene() {

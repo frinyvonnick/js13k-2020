@@ -10,13 +10,11 @@ import {
 } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
-import * as Circle from "../src/entities/Circle";
 
 const CAMERA_SPEED = 10;
 const ZOOM_SPEED = 0.95;
 const availableEntities = {
   Ground,
-  Circle,
 };
 
 const availableEntityTypes = Object.keys(availableEntities);
