@@ -31,7 +31,7 @@ export function makeDesignScene() {
     const scene = Scene({
       id: "game",
       children: [sprite],
-      hasPressedSave: false,
+      hasPressed: {},
       isEditMode: false,
       selectedSprite: null,
       selectedAvailableEntityIndex: 0,
@@ -55,72 +55,119 @@ export function makeDesignScene() {
         spriteToAdd.x = pointer.x;
         spriteToAdd.y = pointer.y;
 
-        if (keyPressed("s")) {
-          this.hasPressedSave = true;
-        } else if (this.hasPressedSave) {
-          this.hasPressedSave = false;
-          save(entities);
-        }
-
-        if (keyPressed("e")) {
-          this.isEditMode = true;
-        }
-
-        if (keyPressed("a")) {
-          this.isEditMode = false;
-          this.selectedSprite = null;
-          document.querySelector("form").remove();
-        }
-
-        if (keyPressed("n")) {
-          if (
-            this.selectedAvailableEntityIndex + 1 <
-            availableEntityTypes.length
-          ) {
-            this.selectedAvailableEntityIndex++;
-            this.changeSelectedAvailableEntity();
-          }
-        }
-
-        if (keyPressed("p")) {
-          if (this.selectedAvailableEntityIndex - 1 >= 0) {
-            this.selectedAvailableEntityIndex--;
-            this.changeSelectedAvailableEntity();
-          }
-        }
-
-        if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
-          this.removeChild(this.selectedSprite);
-          entities = entities.filter(
-            (entity) => entity.id !== this.selectedSprite.id
-          );
-          this.selectedSprite = null;
-          document.querySelector("form").remove();
-        }
-
         if (this.isEditMode) {
           spriteToAdd.opacity = 0;
         } else {
           spriteToAdd.opacity = 1;
         }
+
+        onRelease(this, "s", () => {
+          save(entities);
+        });
+
+        onRelease(this, "e", () => {
+          this.isEditMode = true;
+        });
+
+        onRelease(this, "a", () => {
+          switchToAddMode();
+        });
+
+        onRelease(this, "n", () => {
+          selectNextEntity();
+        });
+
+        onRelease(this, "p", () => {
+          selectPreviousEntity();
+        });
+
+        if (this.isEditMode && this.selectedSprite && keyPressed("d")) {
+          removeSelectedSprite();
+        }
       },
     });
 
+    entities.forEach((entity) => {
+      const newSprite = makeSprite(entity, selectSprite);
+      scene.addChild(newSprite);
+      entity.id = newSprite.id;
+    });
+
+    onPointerDown(pasteSpriteToScene);
+
+    function pasteSpriteToScene(e, object) {
+      if (!scene.isEditMode) {
+        const { x, y } = getPointer();
+        const newSprite = cloneSprite(scene.getSpriteToAdd(), selectSprite);
+        scene.addChild(newSprite);
+        const type = availableEntityTypes[scene.selectedAvailableEntityIndex];
+        const entity = availableEntities[type];
+        entities.push({
+          ...entity.defaultValues,
+          x,
+          y,
+          id: newSprite.id,
+          type,
+        });
+      }
+    }
+
+    function switchToAddMode() {
+      scene.isEditMode = false;
+      scene.selectedSprite = null;
+      removeSpriteDetailsForm();
+    }
+
+    function selectNextEntity() {
+      if (
+        !scene.isEditMode &&
+        scene.selectedAvailableEntityIndex + 1 < availableEntityTypes.length
+      ) {
+        scene.selectedAvailableEntityIndex++;
+        scene.changeSelectedAvailableEntity();
+      }
+    }
+
+    function selectPreviousEntity() {
+      if (!scene.isEditMode && scene.selectedAvailableEntityIndex - 1 >= 0) {
+        scene.selectedAvailableEntityIndex--;
+        scene.changeSelectedAvailableEntity();
+      }
+    }
+
+    function removeSpriteDetailsForm() {
+      const alreadyExistingForm = document.querySelector("form");
+      if (alreadyExistingForm) {
+        alreadyExistingForm.remove();
+      }
+    }
+
+    function removeSelectedSprite() {
+      scene.removeChild(scene.selectedSprite);
+      entities = entities.filter(
+        (entity) => entity.id !== scene.selectedSprite.id
+      );
+      scene.selectedSprite = null;
+      removeSpriteDetailsForm();
+    }
+
     function selectSprite() {
-      console.log('selectedSprite', this.id)
+      console.log("selectedSprite", this.id);
       if (scene.isEditMode) {
         scene.selectedSprite = this;
 
-        const alreadyExistingForm = document.querySelector("form");
-        if (alreadyExistingForm) {
-          alreadyExistingForm.remove();
-        }
+        createSpriteDetailsForm();
+      }
+    }
 
-        const form = document.createElement("form");
+    function createSpriteDetailsForm() {
+      removeSpriteDetailsForm();
+      const form = document.createElement("form");
 
-        form.style.backgroundColor = "#ddd";
+      form.style.backgroundColor = "#ddd";
 
-        Object.keys(availableEntities[this.type].defaultValues).forEach((field) => {
+      Object.keys(availableEntities[this.type].defaultValues).forEach(
+        (field) => {
           const group = document.createElement("div");
 
           const label = document.createElement("label");
@@ -139,37 +186,23 @@ export function makeDesignScene() {
           group.appendChild(label);
           group.appendChild(input);
           form.appendChild(group);
-        });
+        }
+      );
 
-        document.body.appendChild(form);
-      }
+      document.body.appendChild(form);
     }
-
-    entities.forEach((entity) => {
-      const newSprite = makeSprite(entity, selectSprite);
-      scene.addChild(newSprite);
-      entity.id = newSprite.id;
-    });
-
-    onPointerDown(function (e, object) {
-      if (!scene.isEditMode) {
-        const { x, y } = getPointer();
-        const newSprite = cloneSprite(scene.getSpriteToAdd(), selectSprite);
-        scene.addChild(newSprite);
-        const type = availableEntityTypes[scene.selectedAvailableEntityIndex];
-        const entity = availableEntities[type];
-        entities.push({
-          ...entity.defaultValues,
-          x,
-          y,
-          id: newSprite.id,
-          type,
-        });
-      }
-    });
 
     return scene;
   });
+}
+
+function onRelease(scene, key, cb) {
+  if (keyPressed(key)) {
+    scene.hasPressed[key] = true;
+  } else if (scene.hasPressed[key]) {
+    scene.hasPressed[key] = false;
+    cb();
+  }
 }
 
 function makeSprite(props, onDown) {
@@ -178,7 +211,6 @@ function makeSprite(props, onDown) {
     ...entity.makeEntity(props),
     id: uuidv4(),
     render: entity.render,
-    update: entity.update,
     onDown,
   });
   track(newSprite);
