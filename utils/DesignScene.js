@@ -35,7 +35,6 @@ export function makeDesignScene() {
       children: [sprite],
       hasPressed: {},
       isEditMode: false,
-      isRoundedPlacement: false,
       selectedSprite: null,
       selectedAvailableEntityIndex: 0,
       getSpriteToAdd: function () {
@@ -55,13 +54,8 @@ export function makeDesignScene() {
       update: function () {
         const pointer = getPointer();
         const spriteToAdd = this.getSpriteToAdd();
-        spriteToAdd.x = (pointer.x + this.sx) / this.scaleX;
-        spriteToAdd.y = (pointer.y + this.sy) / this.scaleX;
-
-        if (this.isRoundedPlacement) {
-          spriteToAdd.x = Math.round(spriteToAdd.x);
-          spriteToAdd.y = Math.round(spriteToAdd.y);
-        }
+        spriteToAdd.x = Math.round((pointer.x + this.sx) / this.scaleX);
+        spriteToAdd.y = Math.round((pointer.y + this.sy) / this.scaleX);
 
         if (this.isEditMode) {
           spriteToAdd.opacity = 0;
@@ -89,15 +83,9 @@ export function makeDesignScene() {
           selectPreviousEntity();
         });
 
-        onRelease(this, "c", () => {
-          if (this.isEditMode)
-            this.isRoundedPlacement = !this.isRoundedPlacement;
-        });
-
         const MOVE_SPEED = CAMERA_SPEED / this.scaleX;
         if (keyPressed("left")) {
           this.camera.x -= MOVE_SPEED;
-          console.log("scale : ", this.scaleX, "cam speed : ", MOVE_SPEED);
         }
 
         if (keyPressed("up")) {
