@@ -3,6 +3,8 @@ import { Scene, Sprite } from "kontra";
 import { makeHero } from "../entities/Hero.js";
 
 import * as Ground from "../entities/Ground";
+import * as Tree from "../entities/Tree";
+import * as Bush from "../entities/Bush";
 
 import { GameManager } from "../managers/GameManager.js";
 
@@ -10,6 +12,8 @@ import entities from "../../utils/entities.json";
 
 const availableEntities = {
   Ground,
+  Tree,
+  Bush,
 };
 
 export function makeMainScene() {
