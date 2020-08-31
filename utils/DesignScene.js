@@ -10,11 +10,13 @@ import {
 } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
+import * as Tree from "../src/entities/Tree";
 
 const CAMERA_SPEED = 10;
 const ZOOM_SPEED = 0.95;
 const availableEntities = {
   Ground,
+  Tree,
 };
 
 const availableEntityTypes = Object.keys(availableEntities);
@@ -202,7 +204,9 @@ export function makeDesignScene() {
           const input = document.createElement("input");
           input.value = sprite[field];
           input.oninput = function (e) {
-            const value = e.target.value;
+            const value = Number.isNaN(e.target.value)
+              ? e.target.value
+              : Number(e.target.value);
             scene.selectedSprite[field] = value;
             entities.find((entity) => entity.id === scene.selectedSprite.id)[
               field
