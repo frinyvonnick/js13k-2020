@@ -19,7 +19,7 @@ export function makeMainScene() {
 
       return Scene({
         id: "game",
-        children: [hero, ...sprites],
+        children: [...sprites, hero],
         update: function () {
           gameManager.update(hero, sprites);
         },
