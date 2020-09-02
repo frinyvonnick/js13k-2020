@@ -43,9 +43,26 @@ export function makeDesignScene() {
       firstAvailableEntity.defaultValues
     );
 
+    const foreground = Scene({
+      id: "foreground",
+      group: 1,
+      type: "Scene",
+      cullObjects: false,
+      children: [],
+    });
+
+    const background = Scene({
+      id: "background",
+      group: 3,
+      type: "Scene",
+      cullObjects: false,
+      children: [],
+    });
+
     const scene = Scene({
       id: "game",
-      children: [sprite],
+      cullObjects: false,
+      children: [sprite, foreground, background],
       pressedFrames: 0,
       hasPressed: {},
       isEditMode: false,
@@ -98,6 +115,11 @@ export function makeDesignScene() {
           selectedEntity.y = this.selectedSprite.y;
         }
       },
+      render: function () {
+        this.children
+          .filter((child) => child.type === "Scene")
+          .forEach((s) => s.render());
+      },
       update: function () {
         const pointer = getPointer();
         const spriteToAdd = this.getSpriteToAdd();
@@ -132,7 +154,10 @@ export function makeDesignScene() {
 
         const moveSpeed = CAMERA_SPEED / this.scaleX;
         if (keyPressed("left")) {
+          // Déplacer les scenes back et foreground
           this.camera.x -= moveSpeed;
+          foreground.x -= moveSpeed * 1.5 * -1;
+          background.x -= moveSpeed * 0.1;
         }
 
         if (keyPressed("up")) {
@@ -140,7 +165,10 @@ export function makeDesignScene() {
         }
 
         if (keyPressed("right")) {
+          // Déplacer les scenes back et foreground
           this.camera.x += moveSpeed;
+          foreground.x += moveSpeed * 1.5 * -1;
+          background.x += moveSpeed * 0.1;
         }
 
         if (keyPressed("down")) {
@@ -167,7 +195,7 @@ export function makeDesignScene() {
 
     entities.forEach((entity) => {
       const newSprite = makeSprite(entity, selectSprite);
-      scene.addChild(newSprite);
+      addToRightScene(newSprite);
       entity.id = newSprite.id;
     });
     scene.children.sort(sortSprites);
@@ -189,6 +217,29 @@ export function makeDesignScene() {
           id: newSprite.id,
           type,
         });
+      }
+    }
+
+    function addToRightScene(newSprite) {
+      if (newSprite.group === 1) {
+        foreground.addChild(newSprite);
+        foreground.children.sort(sortSprites);
+      } else if (newSprite.group === 3) {
+        background.addChild(newSprite);
+        background.children.sort(sortSprites);
+      } else {
+        scene.addChild(newSprite);
+        scene.children.sort(sortSprites);
+      }
+    }
+
+    function removeFromRightScene(spriteToDelete) {
+      if (spriteToDelete.group === 1) {
+        foreground.removeChild(spriteToDelete);
+      } else if (spriteToDelete.group === 3) {
+        background.removeChild(spriteToDelete);
+      } else {
+        scene.removeChild(spriteToDelete);
       }
     }
 
@@ -223,8 +274,7 @@ export function makeDesignScene() {
     }
 
     function removeSelectedSprite() {
-      scene.removeChild(scene.selectedSprite);
-      scene.children = scene.children.sort(sortSprites);
+      removeFromRightScene(scene.selectedSprite);
       entities = entities.filter(
         (entity) => entity.id !== scene.selectedSprite.id
       );
@@ -279,11 +329,11 @@ export function makeDesignScene() {
     }
     function refreshSelectedSprite(selectedEntity) {
       // This refresh enables optimization at sprite initialization
+      // TODO supprimer dans la bonne scene et ajouter dans la bonne
       const updatedSprite = makeSprite(selectedEntity, selectSprite);
-      scene.addChild(updatedSprite);
-      scene.removeChild(scene.selectedSprite);
+      addToRightScene(updatedSprite);
+      removeFromRightScene(scene.selectedSprite);
       scene.selectedSprite = updatedSprite;
-      scene.children.sort(sortSprites);
       updateSpriteDetailsForm(scene.selectedSprite);
     }
 
