@@ -37,7 +37,7 @@ export function makeHero() {
         // Animations
         _a: 0,
         _f: 0,
-        _currentAnimation: "idle",
+        _currentAnimation: "run",
         _availableAnimations: {
           run: HeroRunAnimation,
           jump: HeroJumpAnimation,
@@ -153,6 +153,8 @@ export function makeHero() {
           }
 
           const animationSprite = this.children[0];
+          this.playCanvasAnimation("run");
+
           if (this.dx === 0 && this.dy === GRAVITY) {
             this.playCanvasAnimation("idle");
           } else if (this.dy === GRAVITY) {
