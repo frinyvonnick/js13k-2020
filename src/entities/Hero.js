@@ -70,7 +70,7 @@ export function makeHero() {
           const frame = this._availableAnimations[
             this._currentAnimation
           ].frames[this._f].bind(this)();
-          drawHero.bind(this)(frame);
+          drawHero.bind(this)(frame, this._f);
         },
         updateAnimation: function (dt = 1 / 60) {
           // Code from Kontra : https://github.com/straker/kontra/blob/main/src/animation.js#L125
@@ -153,7 +153,6 @@ export function makeHero() {
           }
 
           const animationSprite = this.children[0];
-          this.playCanvasAnimation("run");
 
           if (this.dx === 0 && this.dy === GRAVITY) {
             this.playCanvasAnimation("idle");

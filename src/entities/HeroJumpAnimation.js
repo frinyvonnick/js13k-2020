@@ -32,6 +32,9 @@ const frame1 = function() {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 330,
+    featherRotation: 240,
+    featherMovement: 2,
   };
 };
 
@@ -69,6 +72,9 @@ const frame2 = function() {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 330,
+    featherRotation: 240,
+    featherMovement: 2,
   };
 };
 
@@ -106,6 +112,9 @@ const frame3 = function() {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 330,
+    featherRotation: 240,
+    featherMovement: 2,
   };
 };
 

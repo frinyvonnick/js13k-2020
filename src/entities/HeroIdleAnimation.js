@@ -32,6 +32,8 @@ const frame1 = function () {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 280,
+    cloakMovement: 0,
   };
 };
 
@@ -67,6 +69,8 @@ const frame2 = function () {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 280,
+    cloakMovement: 0,
   };
 };
 
@@ -103,6 +107,8 @@ const frame3 = function () {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 280,
+    cloakMovement: 0,
   };
 };
 
@@ -139,6 +145,8 @@ const frame4 = function () {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 280,
+    cloakMovement: 0,
   };
 };
 
@@ -175,6 +183,8 @@ const frame5 = function () {
     rightKnee,
     rightFoot,
     rightFootTip,
+    cloakRotation: 280,
+    cloakMovement: 0,
   };
 };
 export const HeroIdleAnimation = {
