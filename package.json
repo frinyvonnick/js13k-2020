@@ -30,6 +30,10 @@
       "maxSize": "13 kB"
     }
   ],
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frinyvonnick/js13k-2020.git"
