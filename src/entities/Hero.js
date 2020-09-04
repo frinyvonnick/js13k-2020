@@ -1,5 +1,6 @@
 import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 
+import { drawingConstants } from "./HeroDrawingConstants";
 import { HeroRunAnimation } from "./HeroRunAnimation";
 import { HeroIdleAnimation } from "./HeroIdleAnimation";
 import { HeroJumpAnimation } from "./HeroJumpAnimation";
@@ -16,22 +17,13 @@ const GLIDE_SPEED = 0.2;
 const MOVEMENT_SPEED = 3;
 
 export function makeHero() {
-  const hitBoxWidth = 10;
-  const characterWidth = 32;
-  const characterHeight = 38;
-  const originX = -characterWidth / 2 + hitBoxWidth / 2;
-  const headX = originX + characterWidth / 2;
-  const headRadius = characterHeight / 3.5;
-  const legSize = (characterHeight - headRadius * 2) / 2;
-  const footSize = legSize / 2;
-
   return Sprite({
     group: 2,
     zIndex: 3,
     anchor: { x: 0.5, y: 0.5 },
     x: 100,
     y: 10,
-    width: hitBoxWidth,
+    width: drawingConstants.hitBoxWidth,
     height: 112 / 3,
     dx: 0,
     // Animations
@@ -51,15 +43,6 @@ export function makeHero() {
         this._currentAnimation = name;
       }
     },
-    drawingConstants: {
-      width: characterWidth,
-      height: characterHeight,
-      originX,
-      headX,
-      headRadius,
-      legSize,
-      footSize,
-    },
     // children: [animationSprite],
     jumpFrames: 0,
     isGrounded: false,
@@ -67,9 +50,9 @@ export function makeHero() {
     stillJumping: false,
     hasDoubleJump: false,
     render: function () {
-      const frame = this._availableAnimations[this._currentAnimation].frames[
+      let frame = this._availableAnimations[this._currentAnimation].frames[
         this._f
-      ].bind(this)();
+      ];
       drawHero.bind(this)(frame, this._f);
     },
     updateAnimation: function (dt = 1 / 60) {
