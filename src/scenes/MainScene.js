@@ -13,19 +13,17 @@ const availableEntities = {
 };
 
 export function makeMainScene() {
-  return Promise.all([makeHero(), generateSpritesFromEntities()]).then(
-    ([hero, sprites]) => {
-      const gameManager = new GameManager();
+  const hero = makeHero();
+  const sprites = generateSpritesFromEntities();
+  const gameManager = new GameManager();
 
-      return Scene({
-        id: "game",
-        children: [...sprites, hero],
-        update: function () {
-          gameManager.update(hero, sprites);
-        },
-      });
-    }
-  );
+  return Scene({
+    id: "game",
+    children: [...sprites, hero],
+    update: function () {
+      gameManager.update(hero, sprites);
+    },
+  });
 }
 
 function generateSpritesFromEntities() {
