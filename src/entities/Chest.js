@@ -6,6 +6,7 @@ export const defaultValues = {
   width: 50,
   height: 50,
   content: '',
+  opened: false,
   color: "brown",
 };
 

@@ -11,10 +11,10 @@ export class ObjectManager {
         if (object.type === KEY) {
           hero.addToInventory(KEY)
           removeObject(object)
-        } else if (object.type === CHEST && object.content && hero.hasInInventory(KEY)) {
+        } else if (object.type === CHEST && !object.opened && hero.hasInInventory(KEY)) {
           hero.removeFromInventory(KEY)
           hero.addToInventory(object.content)
-          object.content = ''
+          object.opened = true
         }
       }
     })
