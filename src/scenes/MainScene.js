@@ -1,4 +1,4 @@
-import { Scene, Sprite } from "kontra";
+import { Scene, Sprite, keyPressed } from "kontra";
 
 import { makeHero } from "../entities/Hero.js";
 
@@ -11,7 +11,10 @@ import * as Sequoia from "../entities/Sequoia";
 import * as Sky from "../entities/Sky";
 import * as Key from "../entities/Key";
 import * as Chest from "../entities/Chest";
+
 import { sortSprites } from "../utils/layers";
+import { CPlayer } from "../utils/sound";
+import { song } from "../utils/song";
 
 import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
@@ -29,6 +32,10 @@ const availableEntities = {
   Key,
   Chest,
 };
+
+
+const player = new CPlayer();
+player.init(song);
 
 export function makeMainScene() {
   const hero = makeHero();
@@ -49,8 +56,28 @@ export function makeMainScene() {
 
   return Scene({
     id: "game",
+    isMusicPlaying: false,
+    isMusicGenerated: false,
+    isMusicGenerating: false,
     children: [hero, ...sprites].sort(sortSprites),
     update: function () {
+      if (!this.isMusicGenerated && keyPressed('enter')) {
+        this.isMusicGenerating = true
+      }
+
+      if (this.isMusicGenerating && !this.isMusicGenerated) {
+        this.isMusicGenerated = player.generate() >= 1;
+      }
+
+      if (!this.isMusicPlaying && this.isMusicGenerated) {
+        var wave = player.createWave();
+        var audio = document.createElement("audio");
+        audio.loop = true
+        audio.src = URL.createObjectURL(new Blob([wave], { type: "audio/wav" }));
+        audio.play();
+        this.isMusicPlaying = true
+      }
+
       gameManager.update(hero, collidingSprites);
       objectManager.update(hero, objects, {
         removeObject: (object) => {
