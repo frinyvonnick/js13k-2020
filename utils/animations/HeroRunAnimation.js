@@ -1,5 +1,4 @@
-import drawHero from "./HeroAnimation";
-import { drawingConstants } from "./HeroDrawingConstants";
+const { drawingConstants } = require("./HeroDrawingConstants");
 
 const {
   width,
@@ -115,7 +114,7 @@ const frame4 = {
   featherRotation: 270,
 };
 
-export const HeroRunAnimation = {
+module.exports = {
   frameRate: 10,
   frames: [frame1, frame2, frame3, frame4],
 };

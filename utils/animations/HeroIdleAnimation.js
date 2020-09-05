@@ -1,5 +1,4 @@
-import drawHero from "./HeroAnimation";
-import { drawingConstants } from "./HeroDrawingConstants";
+const { drawingConstants } = require("./HeroDrawingConstants");
 
 const {
   width,
@@ -43,7 +42,7 @@ const frame2 = {
   rightFootTip,
 };
 
-export const HeroIdleAnimation = {
+module.exports = {
   frameRate: 10,
   frames: [frame1, frame2, frame1, frame1, frame1],
 };

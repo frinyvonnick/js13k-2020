@@ -1,10 +1,6 @@
 import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 
-import { drawingConstants } from "./HeroDrawingConstants";
-import { HeroRunAnimation } from "./HeroRunAnimation";
-import { HeroIdleAnimation } from "./HeroIdleAnimation";
-import { HeroJumpAnimation } from "./HeroJumpAnimation";
-import { HeroFallAnimation } from "./HeroFallAnimation";
+import animations from "./animations.json"
 import drawHero from "./HeroAnimation";
 
 const MAX_SPEED = 10;
@@ -23,19 +19,14 @@ export function makeHero() {
     anchor: { x: 0.5, y: 0.5 },
     x: 100,
     y: 10,
-    width: drawingConstants.hitBoxWidth,
+    width: 10,
     height: 112 / 3,
     dx: 0,
     // Animations
     _a: 0,
     _f: 0,
     _currentAnimation: "run",
-    _availableAnimations: {
-      run: HeroRunAnimation,
-      jump: HeroJumpAnimation,
-      idle: HeroIdleAnimation,
-      fall: HeroFallAnimation,
-    },
+    _availableAnimations: animations,
     playCanvasAnimation: function (name) {
       if (name !== this._currentAnimation) {
         this._f = 0;
