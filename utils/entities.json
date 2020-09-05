@@ -292,5 +292,80 @@
     "lightColor": "#f9fcf8",
     "id": "6434c337-4d6e-43f8-8f5e-b9cf09b50003",
     "type": "Sky"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 1287,
+    "y": 320,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "color": "gray",
+    "id": "7c51c45c-b8f9-4aca-acc7-40ac34a3d878",
+    "type": "Key"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 701,
+    "y": 326,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "content": "Boots",
+    "color": "brown",
+    "id": "f9148bf8-a6dc-473d-8718-5ce331fe62b1",
+    "type": "Chest"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 441,
+    "y": 326,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "color": "gray",
+    "id": "5bf32b41-d1ed-4d06-a3ba-85e89db39774",
+    "type": "Key"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 1854,
+    "y": 320,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "color": "gray",
+    "id": "6dfe2df7-3b23-47a1-92c1-8e46bc8513cf",
+    "type": "Key"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 1599,
+    "y": 323,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "content": "Cloak",
+    "color": "brown",
+    "id": "347125ea-d23e-408b-aa1b-72c3f8e34dbf",
+    "type": "Chest"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 2120,
+    "y": 323,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "content": "Bandana",
+    "color": "brown",
+    "id": "c3916866-da84-4d52-9157-bf02a36be3a4",
+    "type": "Chest"
   }
 ]

@@ -1,3 +1,5 @@
+import { BOOTS, BANDANA, CLOAK } from "../entities/HeroInventory";
+
 export default function drawHero(
   {
     headRadius,
@@ -25,24 +27,28 @@ export default function drawHero(
 
   this.context.fill();
 
-  drawBandana.bind(this)({ headRadius, headX, headY });
+  if (this.hasInInventory(BANDANA)) {
+    drawBandana.bind(this)({ headRadius, headX, headY });
+    drawFeather.bind(this)({
+      headRadius,
+      headX,
+      headY,
+      featherRotation,
+      featherMovement,
+      frameIndex,
+    });
+  }
 
-  drawFeather.bind(this)({
-    headRadius,
-    headX,
-    headY,
-    featherRotation,
-    featherMovement,
-    frameIndex,
-  });
-  drawCloak.bind(this)({
-    headRadius,
-    headX,
-    headY,
-    frameIndex,
-    cloakRotation,
-    cloakMovement,
-  });
+  if (this.hasInInventory(CLOAK)) {
+    drawCloak.bind(this)({
+      headRadius,
+      headX,
+      headY,
+      frameIndex,
+      cloakRotation,
+      cloakMovement,
+    });
+  }
 
   // Draw body
   this.context.beginPath();
@@ -63,8 +69,10 @@ export default function drawHero(
   this.context.lineJoin = "round";
   this.context.stroke();
 
-  drawBoot.bind(this)({ foot: leftFoot, footTip: leftFootTip });
-  drawBoot.bind(this)({ foot: rightFoot, footTip: rightFootTip });
+  if (this.hasInInventory(BOOTS)) {
+    drawBoot.bind(this)({ foot: leftFoot, footTip: leftFootTip });
+    drawBoot.bind(this)({ foot: rightFoot, footTip: rightFootTip });
+  }
 }
 
 function drawCloak({
