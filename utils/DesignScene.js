@@ -18,6 +18,8 @@ import * as Hill from "../src/entities/Hill";
 import * as Land from "../src/entities/Land";
 import * as Sequoia from "../src/entities/Sequoia";
 import * as Sky from "../src/entities/Sky";
+import * as Key from "../src/entities/Key";
+import * as Chest from "../src/entities/Chest";
 import { sortSprites } from "../src/utils/layers";
 
 const CAMERA_SPEED = 10;
@@ -30,6 +32,8 @@ const availableEntities = {
   Land,
   Sequoia,
   Sky,
+  Key,
+  Chest,
 };
 
 const availableEntityTypes = Object.keys(availableEntities);
