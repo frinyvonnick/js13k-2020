@@ -13,6 +13,7 @@ import {
 
 import * as Ground from "../src/entities/Ground";
 import * as Bounce from "../src/entities/Bounce";
+import * as Slide from "../src/entities/Slide";
 import * as Tree from "../src/entities/Tree";
 import * as Bush from "../src/entities/Bush";
 import * as Hill from "../src/entities/Hill";
@@ -28,6 +29,7 @@ const ZOOM_SPEED = 0.95;
 const availableEntities = {
   Ground,
   Bounce,
+  Slide,
   Tree,
   Bush,
   Hill,
