@@ -1,4 +1,6 @@
-import { Scene, Sprite } from "kontra";
+import { Scene, Sprite, keyPressed, Text } from "kontra";
+
+import { makeSplashScreenScene } from './SplashScreen'
 
 import { makeHero } from "../entities/Hero.js";
 
@@ -11,6 +13,7 @@ import * as Sequoia from "../entities/Sequoia";
 import * as Sky from "../entities/Sky";
 import * as Key from "../entities/Key";
 import * as Chest from "../entities/Chest";
+
 import { sortSprites } from "../utils/layers";
 
 import { GameManager } from "../managers/GameManager.js";
@@ -47,34 +50,46 @@ export function makeMainScene() {
   const gameManager = new GameManager();
   const objectManager = new ObjectManager();
 
-  return Scene({
+  const scene = Scene({
     id: "game",
-    children: [hero, ...sprites].sort(sortSprites),
+    isGameStarted: false,
+    children: [],
+    onStart: function() {
+      this.isGameStarted = true
+      this.children = [hero, ...sprites].sort(sortSprites);
+    },
     update: function () {
-      gameManager.update(hero, collidingSprites);
-      objectManager.update(hero, objects, {
-        removeObject: (object) => {
-          const index = objects.findIndex((obj) => obj === object);
-          if (index !== -1) {
-            objects.splice(index, 1);
-            this.removeChild(object);
-          }
-        },
-      });
-      this.camera.x = hero.x;
-      this.camera.y = hero.y;
+      if (this.isGameStarted) {
+        gameManager.update(hero, collidingSprites);
+        objectManager.update(hero, objects, {
+          removeObject: (object) => {
+            const index = objects.findIndex((obj) => obj === object);
+            if (index !== -1) {
+              objects.splice(index, 1);
+              this.removeChild(object);
+            }
+          },
+        });
+        this.camera.x = hero.x;
+        this.camera.y = hero.y;
 
-      foregroundSprites.forEach((sprite) => {
-        sprite.dx = hero.dx * 1.5 * -1;
-      });
-      backgroundSprites.forEach((sprite) => {
-        sprite.dx = hero.dx * 0.1;
-      });
+        foregroundSprites.forEach((sprite) => {
+          sprite.dx = hero.dx * 1.5 * -1;
+        });
+        backgroundSprites.forEach((sprite) => {
+          sprite.dx = hero.dx * 0.1;
+        });
+      }
     },
     render: function () {
       this.children.forEach((child) => child.render());
     },
   });
+
+  const splashScreenScene = makeSplashScreenScene({ onStart: scene.onStart.bind(scene) })
+  scene.addChild(splashScreenScene)
+
+  return scene
 }
 
 function generateSpritesFromEntities() {
