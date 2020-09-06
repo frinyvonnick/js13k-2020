@@ -88,13 +88,11 @@ export function makeDesignScene() {
           pointerPressed("left") &&
           pointerOver(this.selectedSprite)
         ) {
-          if (this.pressedFrames > 10) {
-            this.hasPressed["left"] = true;
-          }
+          this.hasPressed["left"] = true;
           this.pressedFrames++;
         }
 
-        if (this.hasPressed["left"] && pointerPressed("left")) {
+        if (this.hasPressed["left"] && pointerPressed("left") && this.pressedFrames > 12) {
           this.selectedSprite.x = Math.round(
             (pointer.x + this.sx) / this.scaleX
           );
