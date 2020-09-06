@@ -1,4 +1,4 @@
-import { Scene, Sprite, keyPressed } from "kontra";
+import { Scene, Sprite, keyPressed, Text } from "kontra";
 
 import { makeHero } from "../entities/Hero.js";
 
@@ -13,8 +13,6 @@ import * as Key from "../entities/Key";
 import * as Chest from "../entities/Chest";
 
 import { sortSprites } from "../utils/layers";
-import { CPlayer } from "../utils/sound";
-import { song } from "../utils/song";
 
 import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
@@ -33,10 +31,6 @@ const availableEntities = {
   Chest,
 };
 
-
-const player = new CPlayer();
-player.init(song);
-
 export function makeMainScene() {
   const hero = makeHero();
   const sprites = generateSpritesFromEntities();
@@ -54,54 +48,45 @@ export function makeMainScene() {
   const gameManager = new GameManager();
   const objectManager = new ObjectManager();
 
-  return Scene({
+  const scene = Scene({
     id: "game",
-    isMusicPlaying: false,
-    isMusicGenerated: false,
-    isMusicGenerating: false,
-    children: [hero, ...sprites].sort(sortSprites),
+    isGameStarted: false,
+    children: [splashScreenScene],
+    onStart: function() {
+      this.children = [hero, ...sprites].sort(sortSprites);
+    },
     update: function () {
-      if (!this.isMusicGenerated && keyPressed('enter')) {
-        this.isMusicGenerating = true
+      if (this.isGameStarted) {
+        gameManager.update(hero, collidingSprites);
+        objectManager.update(hero, objects, {
+          removeObject: (object) => {
+            const index = objects.findIndex((obj) => obj === object);
+            if (index !== -1) {
+              objects.splice(index, 1);
+              this.removeChild(object);
+            }
+          },
+        });
+        this.camera.x = hero.x;
+        this.camera.y = hero.y;
+
+        foregroundSprites.forEach((sprite) => {
+          sprite.dx = hero.dx * 1.5 * -1;
+        });
+        backgroundSprites.forEach((sprite) => {
+          sprite.dx = hero.dx * 0.1;
+        });
       }
-
-      if (this.isMusicGenerating && !this.isMusicGenerated) {
-        this.isMusicGenerated = player.generate() >= 1;
-      }
-
-      if (!this.isMusicPlaying && this.isMusicGenerated) {
-        var wave = player.createWave();
-        var audio = document.createElement("audio");
-        audio.loop = true
-        audio.src = URL.createObjectURL(new Blob([wave], { type: "audio/wav" }));
-        audio.play();
-        this.isMusicPlaying = true
-      }
-
-      gameManager.update(hero, collidingSprites);
-      objectManager.update(hero, objects, {
-        removeObject: (object) => {
-          const index = objects.findIndex((obj) => obj === object);
-          if (index !== -1) {
-            objects.splice(index, 1);
-            this.removeChild(object);
-          }
-        },
-      });
-      this.camera.x = hero.x;
-      this.camera.y = hero.y;
-
-      foregroundSprites.forEach((sprite) => {
-        sprite.dx = hero.dx * 1.5 * -1;
-      });
-      backgroundSprites.forEach((sprite) => {
-        sprite.dx = hero.dx * 0.1;
-      });
     },
     render: function () {
       this.children.forEach((child) => child.render());
     },
   });
+
+  const splashScreen = makeSplashScreenScene({ onStart: scene.onStart })
+  scene.addChild(splashScreen)
+
+  return scene
 }
 
 function generateSpritesFromEntities() {
