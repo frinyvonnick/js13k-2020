@@ -2,6 +2,7 @@ import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 
 import animations from "./animations.json"
 import drawHero from "./HeroAnimation";
+import { CLOAK, BOOTS } from "./HeroInventory" 
 
 const MAX_SPEED = 10;
 const JUMP_SPEED = 8;
@@ -101,10 +102,10 @@ export function makeHero() {
       if (!this.isGrounded) this.jumpFrames++;
 
       if (this.isBreakingFall()) {
-        if (this.canDoubleJump()) {
+        if (this.canDoubleJump() && this.hasInInventory(BOOTS)) {
           this.dy = -DOUBLE_JUMP_SPEED;
           this.hasDoubleJump = false;
-        } else {
+        } else if (this.hasInInventory(CLOAK)) {
           this.dy = GLIDE_SPEED;
         }
       }
