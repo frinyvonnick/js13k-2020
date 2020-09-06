@@ -4,12 +4,13 @@ import animations from "./animations.json"
 import drawHero from "./HeroAnimation";
 import { CLOAK, BOOTS } from "./HeroInventory" 
 
-const MAX_SPEED = 10;
+const MAX_FALL_SPEED = 10;
 const MOVEMENT_SPEED = 3;
 const MAX_MOVEMENT_SPEED = 4;
 const MOVEMENT_ACCELERATION = 0.4;
 const MOVEMENT_FRICTION = 0.5;
 const JUMP_SPEED = 8;
+const MAX_JUMP_SPEED = 20;
 const DOUBLE_JUMP_SPEED = 10;
 const MIN_JUMP_FRAMES = 4;
 const MAX_JUMP_FRAMES = 15;
@@ -129,7 +130,7 @@ export function makeHero() {
         }
       }
       this.dx = clamp(-MAX_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED, this.dx);
-      this.dy = clamp(-MAX_SPEED, MAX_SPEED, this.dy);
+      this.dy = clamp(-MAX_JUMP_SPEED, MAX_FALL_SPEED, this.dy);
     },
     update: function (dt) {
       this.updateAnimation(dt);
@@ -163,6 +164,9 @@ export function makeHero() {
       this.hasDoubleJump = true;
       this.jumpFrames = 0;
       this.isJumping = false;
+    },
+    bounce: function () {
+      this.dy = -1.2 * this.dy - 8;
     },
   });
 }

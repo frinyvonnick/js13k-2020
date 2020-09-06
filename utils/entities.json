@@ -370,5 +370,29 @@
     "color": "brown",
     "id": "a17fff8c-137e-4ef0-b20e-2e7696b4ecee",
     "type": "Chest"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 188,
+    "y": 345,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "color": "yellow",
+    "id": "d5673d93-07d0-46e2-b0a7-b4ae09ece168",
+    "type": "Bounce"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": 275,
+    "y": 496,
+    "blur": 0,
+    "width": 50,
+    "height": 50,
+    "color": "yellow",
+    "id": "c9ca9347-9b39-4ba8-8349-52bde1602c6f",
+    "type": "Bounce"
   }
 ]
