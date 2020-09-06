@@ -93,8 +93,15 @@ export function makeDesignScene() {
         }
 
         if (this.hasPressed["left"] && pointerPressed("left") && this.pressedFrames > 12) {
+          let offsetX = 0;
+          if (this.selectedSprite.group === 1) {
+            offsetX = foreground.x;
+          } else if (this.selectedSprite.group === 3) {
+            offsetX = background.x;
+          }
+
           this.selectedSprite.x = Math.round(
-            (pointer.x + this.sx) / this.scaleX
+            ((pointer.x + this.sx) / this.scaleX) - offsetX
           );
           this.selectedSprite.y = Math.round(
             (pointer.y + this.sy) / this.scaleX
