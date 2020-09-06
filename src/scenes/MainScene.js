@@ -1,5 +1,7 @@
 import { Scene, Sprite, keyPressed, Text } from "kontra";
 
+import { makeSplashScreenScene } from './SplashScreen'
+
 import { makeHero } from "../entities/Hero.js";
 
 import * as Ground from "../entities/Ground";
@@ -51,8 +53,9 @@ export function makeMainScene() {
   const scene = Scene({
     id: "game",
     isGameStarted: false,
-    children: [splashScreenScene],
+    children: [],
     onStart: function() {
+      this.isGameStarted = true
       this.children = [hero, ...sprites].sort(sortSprites);
     },
     update: function () {
@@ -83,8 +86,8 @@ export function makeMainScene() {
     },
   });
 
-  const splashScreen = makeSplashScreenScene({ onStart: scene.onStart })
-  scene.addChild(splashScreen)
+  const splashScreenScene = makeSplashScreenScene({ onStart: scene.onStart.bind(scene) })
+  scene.addChild(splashScreenScene)
 
   return scene
 }
