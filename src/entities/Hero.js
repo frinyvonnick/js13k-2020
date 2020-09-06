@@ -22,6 +22,19 @@ export function makeHero() {
     width: 10,
     height: 112 / 3,
     dx: 0,
+    // Inventory
+    inventory: [],
+    hasInInventory: function (object) {
+      const objectIndex = this.inventory.findIndex((obj) => obj === object);
+      return objectIndex !== -1;
+    },
+    addToInventory: function (object) {
+      this.inventory.push(object);
+    },
+    removeFromInventory: function (object) {
+      const objectIndex = this.inventory.findIndex((obj) => obj === object);
+      this.inventory.splice(objectIndex, 1);
+    },
     // Animations
     _a: 0,
     _f: 0,

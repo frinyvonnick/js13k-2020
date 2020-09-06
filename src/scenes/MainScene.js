@@ -9,9 +9,12 @@ import * as Hill from "../entities/Hill";
 import * as Land from "../entities/Land";
 import * as Sequoia from "../entities/Sequoia";
 import * as Sky from "../entities/Sky";
+import * as Key from "../entities/Key";
+import * as Chest from "../entities/Chest";
 import { sortSprites } from "../utils/layers";
 
 import { GameManager } from "../managers/GameManager.js";
+import { ObjectManager } from "../managers/ObjectManager.js";
 
 import entities from "../../utils/entities.json";
 
@@ -23,6 +26,8 @@ const availableEntities = {
   Land,
   Sequoia,
   Sky,
+  Key,
+  Chest,
 };
 
 export function makeMainScene() {
@@ -31,17 +36,31 @@ export function makeMainScene() {
   const middlegroundSprites = sprites.filter((sprite) => sprite.group === 2);
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
+
   const collidingSprites = middlegroundSprites.filter((sprite) =>
     ["Ground"].includes(sprite.type)
   );
+  const objects = middlegroundSprites.filter((sprite) =>
+    ["Key", "Chest"].includes(sprite.type)
+  );
 
   const gameManager = new GameManager();
+  const objectManager = new ObjectManager();
 
   return Scene({
     id: "game",
     children: [hero, ...sprites].sort(sortSprites),
     update: function () {
       gameManager.update(hero, collidingSprites);
+      objectManager.update(hero, objects, {
+        removeObject: (object) => {
+          const index = objects.findIndex((obj) => obj === object);
+          if (index !== -1) {
+            objects.splice(index, 1);
+            this.removeChild(object);
+          }
+        },
+      });
       this.camera.x = hero.x;
       this.camera.y = hero.y;
 
