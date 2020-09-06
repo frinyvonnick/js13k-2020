@@ -31,10 +31,13 @@ export function render() {
     false
   );
 
-  this.context.moveTo((this.width - this.keyRadius * 2) + 2, this.keyRadius * 2 - 2)
-  this.context.lineTo(0, this.height)
-  this.context.moveTo(4, this.height - 4)
-  this.context.lineTo(8, this.height)
+  this.context.moveTo(
+    this.width - this.keyRadius * 2 + 2,
+    this.keyRadius * 2 - 2
+  );
+  this.context.lineTo(0, this.height);
+  this.context.moveTo(4, this.height - 4);
+  this.context.lineTo(8, this.height);
 
   this.context.stroke();
 }

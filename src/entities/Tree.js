@@ -34,7 +34,6 @@ export const makeEntity = function (props = defaultValues) {
 };
 
 export function render() {
-
   this.context.beginPath();
   this.context.filter = `blur(${this.blur}px)`;
 

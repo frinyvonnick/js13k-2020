@@ -26,7 +26,6 @@ export const makeEntity = function (props = defaultValues) {
 };
 
 export function render() {
-
   this.context.beginPath();
   this.context.fillStyle = this.color;
   this.context.rect(0, 0, this.width, this.height);
