@@ -8,7 +8,10 @@ const MAX_FALL_SPEED = 10;
 const MOVEMENT_SPEED = 3;
 const MAX_MOVEMENT_SPEED = 4;
 const MOVEMENT_ACCELERATION = 0.4;
+const SLIDING_MOVEMENT_ACCELERATION = 0.1;
 const MOVEMENT_FRICTION = 0.5;
+const AIR_MOVEMENT_FRICTION = 0.1;
+const SLIDING_MOVEMENT_FRICTION = 0.05;
 const JUMP_SPEED = 8;
 const MAX_JUMP_SPEED = 20;
 const DOUBLE_JUMP_SPEED = 10;
@@ -58,6 +61,7 @@ export function makeHero() {
     isJumping: false,
     stillJumping: false,
     hasDoubleJump: false,
+    isSliding: false,
     render: function () {
       let frame = this._availableAnimations[this._currentAnimation].frames[
         this._f
@@ -118,17 +122,36 @@ export function makeHero() {
     },
     handleMovement: function () {
       if (keyPressed("q")) {
-        this.ddx = -MOVEMENT_ACCELERATION;
+        this.ddx = this.isSliding
+          ? -SLIDING_MOVEMENT_ACCELERATION
+          : -MOVEMENT_ACCELERATION;
       } else if (keyPressed("d")) {
-        this.ddx = MOVEMENT_ACCELERATION;
-      } else {
+        this.ddx = this.isSliding
+          ? SLIDING_MOVEMENT_ACCELERATION
+          : MOVEMENT_ACCELERATION;
+      } else if (this.isSliding) {
+        if (Math.abs(this.dx) <= MOVEMENT_FRICTION) {
+          this.ddx = 0;
+        } else {
+          this.ddx = SLIDING_MOVEMENT_FRICTION * -Math.sign(this.dx);
+        }
+      } else if (this.isGrounded) {
         if (Math.abs(this.dx) <= MOVEMENT_FRICTION) {
           this.dx = 0;
           this.ddx = 0;
         } else {
           this.ddx = MOVEMENT_FRICTION * -Math.sign(this.dx);
         }
+      } else {
+        if (Math.abs(this.dx) <= AIR_MOVEMENT_FRICTION) {
+          this.dx = 0;
+          this.ddx = 0;
+        } else {
+          this.ddx = AIR_MOVEMENT_FRICTION * -Math.sign(this.dx);
+        }
       }
+
+      this.isSliding = false;
       this.dx = clamp(-MAX_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED, this.dx);
       this.dy = clamp(-MAX_JUMP_SPEED, MAX_FALL_SPEED, this.dy);
     },
@@ -138,8 +161,8 @@ export function makeHero() {
 
       this.ddy = GRAVITY;
 
-      this.handleJump();
       this.handleMovement();
+      this.handleJump();
 
       if (this.dx > 0) {
         this.scaleX = 1;
@@ -167,6 +190,9 @@ export function makeHero() {
     },
     bounce: function () {
       this.dy = -1.2 * this.dy - 8;
+    },
+    slide: function () {
+      this.isSliding = true;
     },
   });
 }

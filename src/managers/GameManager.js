@@ -167,6 +167,9 @@ function preventHeroFromFalling(hero, object) {
     hero.bounce();
   } else {
     hero.dy = 0;
+    if (object.type === "Slide") {
+      hero.slide();
+    }
   }
   hero.y = object.y - hero.height / 2;
 }

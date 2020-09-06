@@ -394,5 +394,17 @@
     "color": "yellow",
     "id": "c9ca9347-9b39-4ba8-8349-52bde1602c6f",
     "type": "Bounce"
+  },
+  {
+    "group": 2,
+    "zIndex": 1,
+    "x": -500,
+    "y": 350,
+    "blur": 0,
+    "width": 500,
+    "height": 50,
+    "color": "blue",
+    "id": "c42880d1-47ab-457f-8243-11dfc7ff8773",
+    "type": "Slide"
   }
 ]

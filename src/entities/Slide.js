@@ -11,7 +11,7 @@ export const defaultValues = {
 export const makeEntity = function (props = defaultValues) {
   return Sprite({
     ...props,
-    type: "Bounce",
+    type: "Slide",
     render: function () {
       this.context.beginPath();
       this.context.fillStyle = this.color;
