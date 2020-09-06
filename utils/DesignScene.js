@@ -12,6 +12,7 @@ import {
 } from "kontra";
 
 import * as Ground from "../src/entities/Ground";
+import * as Bounce from "../src/entities/Bounce";
 import * as Tree from "../src/entities/Tree";
 import * as Bush from "../src/entities/Bush";
 import * as Hill from "../src/entities/Hill";
@@ -26,6 +27,7 @@ const CAMERA_SPEED = 10;
 const ZOOM_SPEED = 0.95;
 const availableEntities = {
   Ground,
+  Bounce,
   Tree,
   Bush,
   Hill,

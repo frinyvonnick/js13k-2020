@@ -5,6 +5,7 @@ import { makeSplashScreenScene } from './SplashScreen'
 import { makeHero } from "../entities/Hero.js";
 
 import * as Ground from "../entities/Ground";
+import * as Bounce from "../entities/Bounce";
 import * as Tree from "../entities/Tree";
 import * as Bush from "../entities/Bush";
 import * as Hill from "../entities/Hill";
@@ -23,6 +24,7 @@ import entities from "../../utils/entities.json";
 
 const availableEntities = {
   Ground,
+  Bounce,
   Tree,
   Bush,
   Hill,
@@ -40,8 +42,9 @@ export function makeMainScene() {
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
 
-  const collidingSprites = middlegroundSprites.filter((sprite) =>
-    ["Ground"].includes(sprite.type)
+  const collidingSprites = middlegroundSprites.filter(
+    (sprite) =>
+      ["Ground", "Bounce"].includes(sprite.type)
   );
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)

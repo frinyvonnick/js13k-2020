@@ -163,8 +163,12 @@ function doesHeroComeFromRight(hero, object) {
 
 function preventHeroFromFalling(hero, object) {
   hero.touchesGround();
+  if (object.type === "Bounce") {
+    hero.bounce();
+  } else {
+    hero.dy = 0;
+  }
   hero.y = object.y - hero.height / 2;
-  hero.dy = 0;
 }
 
 function climb(hero, object) {
