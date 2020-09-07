@@ -21,7 +21,9 @@ import { sortSprites } from "../utils/layers";
 import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
 
-import entities from "../../utils/entities.json";
+import compressedEntities from "../../utils/entities.json";
+import { uncompress } from "../../utils/json"
+const entities = uncompress(compressedEntities)
 
 const availableEntities = {
   Ground,
