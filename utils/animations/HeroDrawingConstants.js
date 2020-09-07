@@ -16,5 +16,5 @@ module.exports = {
     headRadius,
     legSize,
     footSize,
-  }
+  },
 };

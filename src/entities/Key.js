@@ -1,22 +1,3 @@
-import { Sprite } from "kontra";
-import { commonValues } from "./common";
-
-export const defaultValues = {
-  ...commonValues,
-  width: 20,
-  height: 20,
-  color: "gray",
-};
-
-export const makeEntity = function (props = defaultValues) {
-  return Sprite({
-    ...props,
-    type: "Key",
-    keyRadius: props.width / 4,
-    render,
-  });
-};
-
 export function render() {
   this.context.beginPath();
   this.context.strokeStyle = this.color;

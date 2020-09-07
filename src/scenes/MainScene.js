@@ -1,6 +1,6 @@
 import { Scene, Sprite, keyPressed, Text } from "kontra";
 
-import { makeSplashScreenScene } from './SplashScreen'
+import { makeSplashScreenScene } from "./SplashScreen";
 
 import { makeHero } from "../entities/Hero.js";
 
@@ -44,9 +44,8 @@ export function makeMainScene() {
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
 
-  const collidingSprites = middlegroundSprites.filter(
-    (sprite) =>
-      ["Ground", "Bounce", "Slide"].includes(sprite.type)
+  const collidingSprites = middlegroundSprites.filter((sprite) =>
+    ["Ground", "Bounce", "Slide"].includes(sprite.type)
   );
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)
@@ -59,8 +58,8 @@ export function makeMainScene() {
     id: "game",
     isGameStarted: false,
     children: [],
-    onStart: function() {
-      this.isGameStarted = true
+    onStart: function () {
+      this.isGameStarted = true;
       this.children = [hero, ...sprites].sort(sortSprites);
     },
     update: function () {
@@ -91,15 +90,17 @@ export function makeMainScene() {
     },
   });
 
-  const splashScreenScene = makeSplashScreenScene({ onStart: scene.onStart.bind(scene) })
-  scene.addChild(splashScreenScene)
+  const splashScreenScene = makeSplashScreenScene({
+    onStart: scene.onStart.bind(scene),
+  });
+  scene.addChild(splashScreenScene);
 
-  return scene
+  return scene;
 }
 
 function generateSpritesFromEntities() {
   return entities.map((props) => {
     const availableEntity = availableEntities[props.type];
-    return availableEntity.makeEntity(props);
+    return Sprite({ ...props, render: availableEntity.render });
   });
 }
