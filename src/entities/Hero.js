@@ -20,13 +20,13 @@ const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
 
-export function makeHero() {
+export function makeHero({ x, y }) {
   return Sprite({
     group: 2,
     zIndex: 3,
     anchor: { x: 0.5, y: 0.5 },
-    x: 100,
-    y: 10,
+    x: x || 100,
+    y: y || 10,
     width: 10,
     height: 112 / 3,
     dx: 0,
