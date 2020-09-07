@@ -1,6 +1,7 @@
-import { Scene, Sprite, keyPressed, Text } from "kontra";
+import { Scene, Sprite, keyPressed, Text, collides } from "kontra";
 
 import { makeSplashScreenScene } from "./SplashScreen";
+import { makeCreditScreenScene } from "./CreditScreen";
 
 import { makeHero } from "../entities/Hero.js";
 
@@ -22,8 +23,8 @@ import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
 
 import compressedEntities from "../../utils/entities.json";
-import { uncompress } from "../../utils/json"
-const entities = uncompress(compressedEntities)
+import { uncompress } from "../../utils/json";
+const entities = uncompress(compressedEntities);
 
 const availableEntities = {
   Ground,
@@ -41,7 +42,9 @@ const availableEntities = {
 
 export function makeMainScene() {
   const sprites = generateSpritesFromEntities();
-  const spawn = sprites.find(sprite => sprite.type === 'Spawn')
+  const spawn = sprites.find((sprite) => sprite.type === "Spawn");
+  const end = sprites.find((sprite) => sprite.type === "End");
+  end.opacity = 0;
   const hero = makeHero(spawn);
   const middlegroundSprites = sprites.filter((sprite) => sprite.group === 2);
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
@@ -70,7 +73,9 @@ export function makeMainScene() {
     children: [],
     onStart: function () {
       this.isGameStarted = true;
-      this.children = [hero, ...sprites.filter(s => s.type !== 'Spawn')].sort(sortSprites);
+      this.children = [hero, ...sprites.filter((s) => s.type !== "Spawn")].sort(
+        sortSprites
+      );
     },
     update: function () {
       if (this.isGameStarted) {
@@ -93,6 +98,19 @@ export function makeMainScene() {
         backgroundSprites.forEach((sprite) => {
           sprite.dx = hero.dx * 0.1;
         });
+
+        if (
+          collides(hero, end) &&
+          hero.hasInInventory("Boots") &&
+          hero.hasInInventory("Bandana") &&
+          hero.hasInInventory("Cloak")
+        ) {
+          this.children = []
+          const creditScreen = makeCreditScreenScene();
+          this.addChild(creditScreen);
+          this.camera.x = 400
+          this.camera.y = 300
+        }
       }
     },
     render: function () {
@@ -111,6 +129,9 @@ export function makeMainScene() {
 function generateSpritesFromEntities() {
   return entities.map((props) => {
     const availableEntity = availableEntities[props.type];
-    return Sprite({ ...props, render: availableEntity ? availableEntity.render : undefined });
+    return Sprite({
+      ...props,
+      render: availableEntity ? availableEntity.render : undefined,
+    });
   });
 }

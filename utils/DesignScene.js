@@ -24,6 +24,7 @@ import * as Sky from "./entities/Sky";
 import * as Key from "./entities/Key";
 import * as Chest from "./entities/Chest";
 import * as Spawn from "./entities/Spawn";
+import * as End from "./entities/End";
 
 import { sortSprites } from "../src/utils/layers";
 
@@ -42,6 +43,7 @@ const availableEntities = {
   Key,
   Chest,
   Spawn,
+  End,
 };
 
 const availableEntityTypes = Object.keys(availableEntities);
