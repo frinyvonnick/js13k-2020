@@ -8,6 +8,7 @@ import { makeHero } from "../entities/Hero.js";
 import * as Ground from "../entities/Ground";
 import * as Bounce from "../entities/Bounce";
 import * as Slide from "../entities/Slide";
+import * as Fade from "../entities/Fade";
 import * as Tree from "../entities/Tree";
 import * as Bush from "../entities/Bush";
 import * as Hill from "../entities/Hill";
@@ -30,6 +31,7 @@ const availableEntities = {
   Ground,
   Bounce,
   Slide,
+  Fade,
   Tree,
   Bush,
   Hill,
@@ -58,7 +60,7 @@ export function makeMainScene() {
   });
 
   const collidingSprites = middlegroundSprites.filter((sprite) =>
-    ["Ground", "Bounce", "Slide"].includes(sprite.type)
+    ["Ground", "Bounce", "Slide", "Fade"].includes(sprite.type)
   );
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)
@@ -132,6 +134,7 @@ function generateSpritesFromEntities() {
     return Sprite({
       ...props,
       render: availableEntity ? availableEntity.render : undefined,
+      update: availableEntity ? availableEntity.update : undefined,
     });
   });
 }
