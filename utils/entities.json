@@ -128,18 +128,6 @@
     "tc": "#3E4937"
   },
   {
-    "x": 45,
-    "y": 453,
-    "type": "bu",
-    "h": 50,
-    "g": 2,
-    "z": 5,
-    "b": 0,
-    "s": 1,
-    "fc": "#8ec36f",
-    "fsc": "#72b44b"
-  },
-  {
     "x": 357,
     "y": -488,
     "type": "se",
@@ -160,7 +148,7 @@
     "h": 1000,
     "c": "#73955F",
     "g": 2,
-    "z": 1,
+    "z": 6,
     "b": 0
   },
   {
@@ -224,54 +212,6 @@
     "b": 0,
     "hw": 800,
     "hh": 300
-  },
-  {
-    "x": 1420,
-    "y": 452,
-    "type": "bu",
-    "h": 50,
-    "g": 2,
-    "z": 6,
-    "b": 0,
-    "s": 1,
-    "fc": "#8ec36f",
-    "fsc": "#72b44b"
-  },
-  {
-    "x": 1657,
-    "y": 470,
-    "type": "bu",
-    "h": 40,
-    "g": 2,
-    "z": 1,
-    "b": 0,
-    "s": -1,
-    "fc": "#8ec36f",
-    "fsc": "#72b44b"
-  },
-  {
-    "x": 782,
-    "y": 450,
-    "type": "bu",
-    "h": 50,
-    "g": 2,
-    "z": 7,
-    "b": 0,
-    "s": -1,
-    "fc": "#8ec36f",
-    "fsc": "#72b44b"
-  },
-  {
-    "x": 899,
-    "y": 347,
-    "type": "bu",
-    "h": 50,
-    "g": 3,
-    "z": 1,
-    "b": 0,
-    "s": 1,
-    "fc": "#9cd77a",
-    "fsc": "#7dc653"
   },
   {
     "x": 758,
@@ -357,18 +297,6 @@
     "tw": 5,
     "th": 150,
     "tc": "#3E4937"
-  },
-  {
-    "x": 1150,
-    "y": 496,
-    "type": "bu",
-    "h": 50,
-    "g": 2,
-    "z": 1,
-    "b": 0,
-    "s": 1,
-    "fc": "#8ec36f",
-    "fsc": "#72b44b"
   },
   {
     "x": 2,
@@ -479,8 +407,8 @@
     "b": 0
   },
   {
-    "x": 865,
-    "y": 415,
+    "x": 877,
+    "y": 424,
     "type": "Fade",
     "w": 100,
     "h": 10,
@@ -499,5 +427,89 @@
     "g": 2,
     "z": 1,
     "b": 0
+  },
+  {
+    "x": 53,
+    "y": 461,
+    "type": "bu",
+    "foliageComputedColor": "#8ec36f",
+    "foliageShadowComputedColor": "#72b44b",
+    "h": 50,
+    "g": 2,
+    "z": 1,
+    "b": 0,
+    "s": 1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
+  },
+  {
+    "x": 464,
+    "y": 450,
+    "type": "bu",
+    "foliageComputedColor": "#8ec36f",
+    "foliageShadowComputedColor": "#72b44b",
+    "h": 50,
+    "g": 2,
+    "z": 6,
+    "b": 0,
+    "s": 1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
+  },
+  {
+    "x": 884,
+    "y": 345,
+    "type": "bu",
+    "foliageComputedColor": "#9cd77a",
+    "foliageShadowComputedColor": "#7dc653",
+    "h": 50,
+    "g": 3,
+    "z": 1,
+    "b": 0,
+    "s": 1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
+  },
+  {
+    "x": 1161,
+    "y": 493,
+    "type": "bu",
+    "foliageComputedColor": "#8ec36f",
+    "foliageShadowComputedColor": "#72b44b",
+    "h": 50,
+    "g": 2,
+    "z": 1,
+    "b": 0,
+    "s": 1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
+  },
+  {
+    "x": 1424,
+    "y": 448,
+    "type": "bu",
+    "foliageComputedColor": "#8ec36f",
+    "foliageShadowComputedColor": "#72b44b",
+    "h": 50,
+    "g": 2,
+    "z": 7,
+    "b": 0,
+    "s": 1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
+  },
+  {
+    "x": 1656,
+    "y": 466,
+    "type": "bu",
+    "foliageComputedColor": "#8ec36f",
+    "foliageShadowComputedColor": "#72b44b",
+    "h": 40,
+    "g": 2,
+    "z": 1,
+    "b": 0,
+    "s": -1,
+    "fc": "#8ec36f",
+    "fsc": "#72b44b"
   }
 ]
