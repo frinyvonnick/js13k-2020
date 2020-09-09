@@ -1,5 +1,4 @@
 import { Scene, keyPressed, Text } from "kontra";
-import * as Sky from "../entities/Sky";
 import { CPlayer } from "../utils/sound";
 import { song } from "../utils/song";
 
@@ -27,19 +26,10 @@ export function makeSplashScreenScene({ onStart }) {
     textAlign: "center",
   });
 
-  const splashScreenBackground = Sky.makeEntity({
-    color: "#e3f0db",
-    lightColor: "#f9fcf8",
-    width: 800,
-    height: 600,
-    x: 400,
-    y: 300,
-    anchor: { x: 0.5, y: 0.5 },
-  });
   return Scene({
     isGameStarted: false,
     isMusicGenerated: false,
-    children: [splashScreenBackground, splashScreenText, splashScreenTitle],
+    children: [splashScreenText, splashScreenTitle],
     update: function () {
       if (!this.isMusicGenerated) {
         this.isMusicGenerated = player.generate() >= 1;

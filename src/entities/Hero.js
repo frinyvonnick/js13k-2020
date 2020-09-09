@@ -1,8 +1,8 @@
 import { Sprite, SpriteSheet, keyPressed, clamp } from "kontra";
 
-import animations from "./animations.json"
+import animations from "./animations.json";
 import drawHero from "./HeroAnimation";
-import { CLOAK, BOOTS } from "./HeroInventory" 
+import { CLOAK, BOOTS } from "./HeroInventory";
 
 const MAX_FALL_SPEED = 10;
 const MOVEMENT_SPEED = 3;

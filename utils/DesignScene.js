@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { compress, uncompress } from "./json";
 import {
   Scene,
   Sprite,
@@ -11,17 +12,18 @@ import {
   pointerOver,
 } from "kontra";
 
-import * as Ground from "../src/entities/Ground";
-import * as Bounce from "../src/entities/Bounce";
-import * as Slide from "../src/entities/Slide";
-import * as Tree from "../src/entities/Tree";
-import * as Bush from "../src/entities/Bush";
-import * as Hill from "../src/entities/Hill";
-import * as Land from "../src/entities/Land";
-import * as Sequoia from "../src/entities/Sequoia";
-import * as Sky from "../src/entities/Sky";
-import * as Key from "../src/entities/Key";
-import * as Chest from "../src/entities/Chest";
+import * as Ground from "./entities/Ground";
+import * as Bounce from "./entities/Bounce";
+import * as Slide from "./entities/Slide";
+import * as Tree from "./entities/Tree";
+import * as Bush from "./entities/Bush";
+import * as Hill from "./entities/Hill";
+import * as Land from "./entities/Land";
+import * as Sequoia from "./entities/Sequoia";
+import * as Sky from "./entities/Sky";
+import * as Key from "./entities/Key";
+import * as Chest from "./entities/Chest";
+
 import { sortSprites } from "../src/utils/layers";
 
 const CAMERA_SPEED = 10;
@@ -100,7 +102,11 @@ export function makeDesignScene() {
           this.pressedFrames++;
         }
 
-        if (this.hasPressed["left"] && pointerPressed("left") && this.pressedFrames > 12) {
+        if (
+          this.hasPressed["left"] &&
+          pointerPressed("left") &&
+          this.pressedFrames > 12
+        ) {
           let offsetX = 0;
           if (this.selectedSprite.group === 1) {
             offsetX = foreground.x;
@@ -109,7 +115,7 @@ export function makeDesignScene() {
           }
 
           this.selectedSprite.x = Math.round(
-            ((pointer.x + this.sx) / this.scaleX) - offsetX
+            (pointer.x + this.sx) / this.scaleX - offsetX
           );
           this.selectedSprite.y = Math.round(
             (pointer.y + this.sy) / this.scaleX
@@ -223,13 +229,15 @@ export function makeDesignScene() {
         scene.children.sort(sortSprites);
         const type = availableEntityTypes[scene.selectedAvailableEntityIndex];
         const entity = availableEntities[type];
-        entities.push({
-          ...entity.defaultValues,
-          x,
-          y,
-          id: newSprite.id,
-          type,
-        });
+        entities.push(
+          entity.computeProps({
+            ...entity.defaultValues,
+            x,
+            y,
+            id: newSprite.id,
+            type,
+          })
+        );
       }
     }
 
@@ -324,10 +332,14 @@ export function makeDesignScene() {
               ? e.target.value
               : Number.parseFloat(e.target.value);
 
-            const selectedEntity = entities.find(
+            const selectedEntityIndex = entities.findIndex(
               (entity) => entity.id === scene.selectedSprite.id
             );
+            const selectedEntity = entities[selectedEntityIndex];
             selectedEntity[field] = value;
+            entities[selectedEntityIndex] = availableEntities[
+              selectedEntity.type
+            ].computeProps(entities[selectedEntityIndex]);
 
             refreshSelectedSprite(selectedEntity);
           };
@@ -393,12 +405,14 @@ function cloneSprite(sprite, onDown) {
 function save(entities) {
   fetch("http://localhost:7000", {
     method: "POST",
-    body: JSON.stringify(entities),
+    body: compress(entities),
   })
     .then((res) => res.text())
     .then(console.log);
 }
 
 function load() {
-  return fetch("http://localhost:7000").then((res) => res.json());
+  return fetch("http://localhost:7000")
+    .then((res) => res.text())
+    .then((json) => uncompress(json));
 }

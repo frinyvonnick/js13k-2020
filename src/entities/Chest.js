@@ -1,23 +1,3 @@
-import { Sprite } from "kontra";
-import { commonValues } from "./common";
-
-export const defaultValues = {
-  ...commonValues,
-  width: 30,
-  height: 30,
-  content: "",
-  opened: false,
-  color: "brown",
-};
-
-export const makeEntity = function (props = defaultValues) {
-  return Sprite({
-    ...props,
-    type: "Chest",
-    render,
-  });
-};
-
 export function render() {
   const boxHeight = (this.height / 3) * 2;
   const lidHeight = this.height / 3;
