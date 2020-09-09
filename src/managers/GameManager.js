@@ -10,7 +10,7 @@ export class GameManager {
 
     let doesCollide = false;
     objects.forEach((object) => {
-      if (object.opacity === 0) return
+      if (object.opacity === 0) return;
       if (collides(futureFrame, object)) {
         doesCollide = true;
         if (doesHeroComeFromTopOrBottom(hero, object)) {
@@ -171,7 +171,7 @@ function preventHeroFromFalling(hero, object) {
     if (object.type === "Slide") {
       hero.slide();
     } else if (object.type === "Fade") {
-      object.isFading = true
+      object.isFading = true;
     }
   }
   hero.y = object.y - hero.height / 2;

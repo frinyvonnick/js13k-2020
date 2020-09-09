@@ -26,4 +26,3 @@ export const makeEntity = function (props) {
 };
 
 export const render = r;
-

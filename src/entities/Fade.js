@@ -8,18 +8,18 @@ export function render() {
 export function update(dt = 1 / 60) {
   if (this.isFading === true) {
     if (!Number(this._a)) {
-      this._a = 0
+      this._a = 0;
     }
-    this._a++
+    this._a++;
 
     if (this._a / 60 > 1) {
-      this.opacity = 0
-    } 
+      this.opacity = 0;
+    }
 
     if (this._a / 60 > 6) {
-      this.opacity = 1
-      this._a = 0
-      this.isFading = false
-    } 
+      this.opacity = 1;
+      this._a = 0;
+      this.isFading = false;
+    }
   }
 }

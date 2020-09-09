@@ -107,11 +107,11 @@ export function makeMainScene() {
           hero.hasInInventory("Bandana") &&
           hero.hasInInventory("Cloak")
         ) {
-          this.children = []
+          this.children = [];
           const creditScreen = makeCreditScreenScene();
           this.addChild(creditScreen);
-          this.camera.x = 400
-          this.camera.y = 300
+          this.camera.x = 400;
+          this.camera.y = 300;
         }
       }
     },
