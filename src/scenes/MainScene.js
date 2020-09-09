@@ -40,11 +40,19 @@ const availableEntities = {
 };
 
 export function makeMainScene() {
-  const hero = makeHero();
   const sprites = generateSpritesFromEntities();
+  const spawn = sprites.find(sprite => sprite.type === 'Spawn')
+  const hero = makeHero(spawn);
   const middlegroundSprites = sprites.filter((sprite) => sprite.group === 2);
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
+
+  foregroundSprites.forEach((sprite) => {
+    sprite.x = sprite.x + hero.x * 1.5 * -1;
+  });
+  backgroundSprites.forEach((sprite) => {
+    sprite.x = sprite.x + hero.x * 0.1;
+  });
 
   const collidingSprites = middlegroundSprites.filter((sprite) =>
     ["Ground", "Bounce", "Slide"].includes(sprite.type)
@@ -62,7 +70,7 @@ export function makeMainScene() {
     children: [],
     onStart: function () {
       this.isGameStarted = true;
-      this.children = [hero, ...sprites].sort(sortSprites);
+      this.children = [hero, ...sprites.filter(s => s.type !== 'Spawn')].sort(sortSprites);
     },
     update: function () {
       if (this.isGameStarted) {
@@ -103,6 +111,6 @@ export function makeMainScene() {
 function generateSpritesFromEntities() {
   return entities.map((props) => {
     const availableEntity = availableEntities[props.type];
-    return Sprite({ ...props, render: availableEntity.render });
+    return Sprite({ ...props, render: availableEntity ? availableEntity.render : undefined });
   });
 }

@@ -31,7 +31,7 @@ const typeMappingSave = [
 ];
 
 export function compress(json) {
-  const copy = JSON.parse(JSON.stringify(json))
+  const copy = JSON.parse(JSON.stringify(json));
   let result = copy.map((el) => {
     delete el.id;
 
@@ -42,8 +42,11 @@ export function compress(json) {
       }
     });
 
-    const [_, typeValue] = typeMappingSave.find(([type]) => type === el.type);
-    el.type = typeValue;
+    const typeMapping = typeMappingSave.find(([type]) => type === el.type);
+    if (typeMapping) {
+      const [_, typeValue] = typeMapping;
+      el.type = typeValue;
+    }
 
     return el;
   });
@@ -65,8 +68,11 @@ export function uncompress(str) {
       }
     });
 
-    const [typeValue] = typeMappingSave.find(([_, type]) => type === el.type);
-    el.type = typeValue;
+    const typeMapping = typeMappingSave.find(([_, type]) => type === el.type);
+    if (typeMapping) {
+      const [typeValue] = typeMapping;
+      el.type = typeValue;
+    }
 
     return el;
   });
