@@ -27,5 +27,7 @@ export function makeCreditScreenScene() {
   return Scene({
     id: "credit",
     children: [creditScreenText, creditScreenTitle],
+    x: 0,
+    y: 0,
   });
 }
