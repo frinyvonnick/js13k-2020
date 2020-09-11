@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { compress, uncompress } from "./json";
 import {
   Scene,
   Sprite,
@@ -413,14 +412,12 @@ function cloneSprite(sprite, onDown) {
 function save(entities) {
   fetch("http://localhost:7000", {
     method: "POST",
-    body: compress(entities),
+    body: JSON.stringify(entities),
   })
     .then((res) => res.text())
     .then(console.log);
 }
 
 function load() {
-  return fetch("http://localhost:7000")
-    .then((res) => res.text())
-    .then((json) => uncompress(json));
+  return fetch("http://localhost:7000").then((res) => res.json());
 }

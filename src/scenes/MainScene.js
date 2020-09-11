@@ -27,9 +27,10 @@ import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
 import { makeTextManager } from "../managers/TextManager.js";
 
-import compressedEntities from "../../utils/entities.json";
-import { uncompress } from "../../utils/json";
-const entities = uncompress(compressedEntities);
+import compressedEntities from "../entities-prod.json";
+import colors from "../colors.json";
+import { uncompress } from "../utils/json";
+const entities = uncompress(compressedEntities, colors);
 
 const availableEntities = {
   Ground,
