@@ -85,7 +85,7 @@ function drawCloak({
   frameIndex,
 }) {
   this.context.beginPath();
-  this.context.fillStyle = "yellow";
+  this.context.fillStyle = "#e6de63";
   this.context.lineJoin = "round";
 
   this.context.moveTo(headX - headRadius - 1, headY + 2);
@@ -131,7 +131,7 @@ function drawCloak({
 
 function drawBandana({ headRadius, headX, headY }) {
   this.context.beginPath();
-  this.context.fillStyle = "blue";
+  this.context.fillStyle = "#277ae1";
   this.context.lineJoin = "round";
 
   this.context.moveTo(headX - headRadius - 1, headY - 3);
@@ -190,7 +190,7 @@ function drawBoot({ foot, footTip }) {
   this.context.save();
 
   this.context.beginPath();
-  this.context.strokeStyle = "orange";
+  this.context.strokeStyle = "#cc4a38";
   this.context.lineWidth = 3;
   this.context.moveTo(foot[0] - 1.5, foot[1]);
   this.context.lineTo(footTip[0] + 0.5, footTip[1]);
