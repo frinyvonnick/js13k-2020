@@ -11,7 +11,7 @@ const MOVEMENT_ACCELERATION = 0.4;
 const SLIDING_MOVEMENT_ACCELERATION = 0.1;
 const MOVEMENT_FRICTION = 0.5;
 const AIR_MOVEMENT_FRICTION = 0.1;
-const SLIDING_MOVEMENT_FRICTION = 0.05;
+const SLIDING_MOVEMENT_FRICTION = 0.02;
 const JUMP_SPEED = 8;
 const MAX_JUMP_SPEED = 20;
 const DOUBLE_JUMP_SPEED = 10;
@@ -162,7 +162,7 @@ export function makeHero({ x, y, inventory }, { onPick, textManager }) {
 
       this.ddy = GRAVITY;
 
-      if (this.dx === 0 && this.dy === GRAVITY) {
+      if (!keyPressed("d") && !keyPressed("q") && this.dy === GRAVITY) {
         this.playCanvasAnimation("idle");
       } else if (this.dy === GRAVITY) {
         this.playCanvasAnimation("run");
