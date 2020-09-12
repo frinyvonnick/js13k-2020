@@ -96,7 +96,7 @@ export function makeMainScene() {
     ...bounces,
     ...slides,
     ...fades,
-  ];
+  ].sort((a, b) => b.y - a.y);
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)
   );
@@ -104,15 +104,15 @@ export function makeMainScene() {
   const hero = makeHero(spawn, {
     textManager,
     onPick: function (newItem) {
-      if (newItem === BOOTS) {
+      if (newItem === BANDANA) {
         bounces.forEach((platform) => {
           platform.opacity = 1;
         });
-      } else if (newItem === CLOAK) {
+      } else if (newItem === BOOTS) {
         slides.forEach((platform) => {
           platform.opacity = 1;
         });
-      } else if (newItem === BANDANA) {
+      } else if (newItem === CLOAK) {
         fades.forEach((platform) => {
           platform.opacity = 1;
         });
@@ -141,15 +141,13 @@ export function makeMainScene() {
       this.addChild(textManager);
 
       // This setTimeout prevent skipping the first message after the splash screen
-      /*
-      setTimeout(() => {
+      /*setTimeout(() => {
         textManager.displayText("1", () => {
           textManager.displayText("2", () => {
             textManager.displayText("3");
           });
         });
-      }, 500)
-      */
+      }, 500)*/
     },
     update: function () {
       if (this.isGameStarted) {
@@ -164,7 +162,7 @@ export function makeMainScene() {
           },
         });
         this.camera.x = hero.x;
-        this.camera.y = hero.y;
+        this.camera.y = hero.y-150;
 
         foregroundSprites.forEach((sprite) => {
           sprite.dx = hero.dx * 1.5 * -1;
