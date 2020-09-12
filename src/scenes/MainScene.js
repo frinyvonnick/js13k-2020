@@ -18,6 +18,7 @@ import * as Sequoia from "../entities/Sequoia";
 import * as Sky from "../entities/Sky";
 import * as Key from "../entities/Key";
 import * as Chest from "../entities/Chest";
+import * as Tent from "../entities/Tent";
 import { drawShaman } from "../entities/Shaman";
 
 import { sortSprites } from "../utils/layers";
@@ -43,6 +44,7 @@ const availableEntities = {
   Sky,
   Key,
   Chest,
+  Tent,
 };
 
 export function makeMainScene() {
