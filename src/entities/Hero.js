@@ -20,7 +20,7 @@ const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
 
-export function makeHero({ x, y }) {
+export function makeHero({ x, y }, { onPick }) {
   return Sprite({
     group: 2,
     zIndex: 3,
@@ -38,6 +38,7 @@ export function makeHero({ x, y }) {
     },
     addToInventory: function (object) {
       this.inventory.push(object);
+      onPick(object);
     },
     removeFromInventory: function (object) {
       const objectIndex = this.inventory.findIndex((obj) => obj === object);

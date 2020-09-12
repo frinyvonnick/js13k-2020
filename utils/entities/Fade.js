@@ -1,13 +1,12 @@
 import { Sprite } from "kontra";
 import { commonValues } from "./common";
 
-import { render as r } from "../../src/entities/Bounce";
+import { render as r } from "../../src/entities/Fade";
 
 export const defaultValues = {
   ...commonValues,
   width: 100,
   height: 10,
-  color: "orange",
 };
 
 export function computeProps(props) {

@@ -4,6 +4,7 @@ import { makeSplashScreenScene } from "./SplashScreen";
 import { makeCreditScreenScene } from "./CreditScreen";
 
 import { makeHero } from "../entities/Hero.js";
+import { BOOTS, CLOAK, BANDANA } from "../entities/HeroInventory.js";
 
 import * as Ground from "../entities/Ground";
 import * as Bounce from "../entities/Bounce";
@@ -47,10 +48,56 @@ export function makeMainScene() {
   const spawn = sprites.find((sprite) => sprite.type === "Spawn");
   const end = sprites.find((sprite) => sprite.type === "End");
   end.opacity = 0;
-  const hero = makeHero(spawn);
+
   const middlegroundSprites = sprites.filter((sprite) => sprite.group === 2);
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
+
+  const bounces = middlegroundSprites
+    .filter((sprite) => sprite.type === "Bounce")
+    .map((sprite) => {
+      sprite.opacity = 0;
+      return sprite;
+    });
+  const slides = middlegroundSprites
+    .filter((sprite) => sprite.type === "Slide")
+    .map((sprite) => {
+      sprite.opacity = 0;
+      return sprite;
+    });
+  const fades = middlegroundSprites
+    .filter((sprite) => sprite.type === "Fade")
+    .map((sprite) => {
+      sprite.opacity = 0;
+      return sprite;
+    });
+  const collidingSprites = [
+    ...middlegroundSprites.filter((sprite) => ["Ground"].includes(sprite.type)),
+    ...bounces,
+    ...slides,
+    ...fades,
+  ];
+  const objects = middlegroundSprites.filter((sprite) =>
+    ["Key", "Chest"].includes(sprite.type)
+  );
+
+  const hero = makeHero(spawn, {
+    onPick: function (newItem) {
+      if (newItem === BOOTS) {
+        bounces.forEach((platform) => {
+          platform.opacity = 1;
+        });
+      } else if (newItem === CLOAK) {
+        slides.forEach((platform) => {
+          platform.opacity = 1;
+        });
+      } else if (newItem === BANDANA) {
+        fades.forEach((platform) => {
+          platform.opacity = 1;
+        });
+      }
+    },
+  });
 
   foregroundSprites.forEach((sprite) => {
     sprite.x = sprite.x + hero.x * 1.5 * -1;
@@ -58,13 +105,6 @@ export function makeMainScene() {
   backgroundSprites.forEach((sprite) => {
     sprite.x = sprite.x + hero.x * 0.1;
   });
-
-  const collidingSprites = middlegroundSprites.filter((sprite) =>
-    ["Ground", "Bounce", "Slide", "Fade"].includes(sprite.type)
-  );
-  const objects = middlegroundSprites.filter((sprite) =>
-    ["Key", "Chest"].includes(sprite.type)
-  );
 
   const gameManager = new GameManager();
   const objectManager = new ObjectManager();

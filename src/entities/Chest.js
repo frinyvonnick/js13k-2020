@@ -3,7 +3,7 @@ export function render() {
   const lidHeight = this.height / 3;
 
   this.context.beginPath();
-  this.context.fillStyle = this.color;
+  this.context.fillStyle = '#a5764c';
 
   this.context.rect(0, lidHeight, this.width, boxHeight);
   this.context.fill();

@@ -7,7 +7,6 @@ export const defaultValues = {
   ...commonValues,
   width: 100,
   height: 10,
-  color: "yellow",
 };
 
 export function computeProps(props) {

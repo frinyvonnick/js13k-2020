@@ -9,7 +9,6 @@ export const defaultValues = {
   height: 30,
   content: "",
   opened: false,
-  color: "brown",
 };
 
 export function computeProps(props) {
