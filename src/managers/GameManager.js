@@ -193,11 +193,13 @@ function preventHeroFromGoingUpper(hero, object) {
 function preventHeroFromGoingLeft(hero, object) {
   hero.x = object.x + object.width + hero.width / 2;
   hero.dx = 0;
+  hero.ddx = 0;
 }
 
 function preventHeroFromGoingRight(hero, object) {
   hero.x = object.x - hero.width / 2;
   hero.dx = 0;
+  hero.ddx = 0;
 }
 
 function isObjectClimbable(hero, object) {
