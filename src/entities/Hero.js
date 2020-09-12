@@ -20,7 +20,7 @@ const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
 
-export function makeHero({ x, y, inventory }, { onPick }) {
+export function makeHero({ x, y, inventory }, { onPick, textManager }) {
   const hero = Sprite({
     group: 2,
     zIndex: 3,
@@ -162,6 +162,22 @@ export function makeHero({ x, y, inventory }, { onPick }) {
 
       this.ddy = GRAVITY;
 
+      if (this.dx === 0 && this.dy === GRAVITY) {
+        this.playCanvasAnimation("idle");
+      } else if (this.dy === GRAVITY) {
+        this.playCanvasAnimation("run");
+      } else if (this.dy < GRAVITY) {
+        this.playCanvasAnimation("jump");
+      } else if (this.dy > GRAVITY) {
+        this.playCanvasAnimation("fall");
+      }
+
+      if (textManager.isTextDisplayed()) {
+        this.dx = 0;
+        this.ddx = 0;
+        return;
+      }
+
       this.handleMovement();
       this.handleJump();
 
@@ -172,16 +188,6 @@ export function makeHero({ x, y, inventory }, { onPick }) {
       }
 
       const animationSprite = this.children[0];
-
-      if (this.dx === 0 && this.dy === GRAVITY) {
-        this.playCanvasAnimation("idle");
-      } else if (this.dy === GRAVITY) {
-        this.playCanvasAnimation("run");
-      } else if (this.dy < GRAVITY) {
-        this.playCanvasAnimation("jump");
-      } else if (this.dy > GRAVITY) {
-        this.playCanvasAnimation("fall");
-      }
     },
     touchesGround: function () {
       this.isGrounded = true;

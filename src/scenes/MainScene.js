@@ -23,6 +23,7 @@ import { sortSprites } from "../utils/layers";
 
 import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
+import { makeTextManager } from "../managers/TextManager.js";
 
 import compressedEntities from "../../utils/entities.json";
 import { uncompress } from "../../utils/json";
@@ -44,6 +45,10 @@ const availableEntities = {
 };
 
 export function makeMainScene() {
+  const textManager = makeTextManager();
+  const gameManager = new GameManager();
+  const objectManager = new ObjectManager(textManager);
+
   const sprites = generateSpritesFromEntities();
   const spawn = sprites.find((sprite) => sprite.type === "Spawn");
   spawn.inventory = spawn.inventory.split(',').filter(s => s)
@@ -84,6 +89,7 @@ export function makeMainScene() {
   );
 
   const hero = makeHero(spawn, {
+    textManager,
     onPick: function (newItem) {
       if (newItem === BOOTS) {
         bounces.forEach((platform) => {
@@ -108,9 +114,6 @@ export function makeMainScene() {
     sprite.x = sprite.x + hero.x * 0.1;
   });
 
-  const gameManager = new GameManager();
-  const objectManager = new ObjectManager();
-
   const scene = Scene({
     id: "game",
     isGameStarted: false,
@@ -120,6 +123,16 @@ export function makeMainScene() {
       this.children = [hero, ...sprites.filter((s) => s.type !== "Spawn")].sort(
         sortSprites
       );
+      this.addChild(textManager);
+
+      // This setTimeout prevent skipping the first message after the splash screen
+      setTimeout(() => {
+        textManager.displayText("1", () => {
+          textManager.displayText("2", () => {
+            textManager.displayText("3");
+          });
+        });
+      }, 500)
     },
     update: function () {
       if (this.isGameStarted) {
@@ -147,11 +160,20 @@ export function makeMainScene() {
           collides(hero, end) &&
           hero.hasInInventory("Boots") &&
           hero.hasInInventory("Bandana") &&
-          hero.hasInInventory("Cloak")
+          hero.hasInInventory("Cloak") &&
+          !this.isEnd
         ) {
-          this.children = [];
-          const creditScreen = makeCreditScreenScene();
-          this.addChild(creditScreen);
+          this.isEnd = true;
+          textManager.displayText("1", () => {
+            textManager.displayText("2", () => {
+              this.children = [];
+              const creditScreen = makeCreditScreenScene();
+              this.addChild(creditScreen);
+              this.isCredit = true
+            });
+          });
+        }
+        if (this.isCredit) {
           this.camera.x = 400;
           this.camera.y = 300;
         }
