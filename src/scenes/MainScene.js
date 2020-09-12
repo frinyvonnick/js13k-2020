@@ -18,6 +18,7 @@ import * as Sequoia from "../entities/Sequoia";
 import * as Sky from "../entities/Sky";
 import * as Key from "../entities/Key";
 import * as Chest from "../entities/Chest";
+import { drawShaman } from "../entities/Shaman";
 
 import { sortSprites } from "../utils/layers";
 
@@ -51,10 +52,20 @@ export function makeMainScene() {
 
   const sprites = generateSpritesFromEntities();
   const spawn = sprites.find((sprite) => sprite.type === "Spawn");
-  spawn.inventory = spawn.inventory.split(',').filter(s => s)
-  console.log('spawn', spawn)
+  spawn.inventory = spawn.inventory.split(",").filter((s) => s);
+
   const end = sprites.find((sprite) => sprite.type === "End");
   end.opacity = 0;
+  const shaman = Sprite({
+    group: 2,
+    zIndex: 1,
+    x: end.x + end.width / 2,
+    y: end.y + end.height - 38,
+    width: 32,
+    height: 32,
+    scaleX: -1,
+    render: drawShaman,
+  });
 
   const middlegroundSprites = sprites.filter((sprite) => sprite.group === 2);
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
@@ -120,12 +131,15 @@ export function makeMainScene() {
     children: [],
     onStart: function () {
       this.isGameStarted = true;
-      this.children = [hero, ...sprites.filter((s) => s.type !== "Spawn")].sort(
-        sortSprites
-      );
+      this.children = [
+        hero,
+        ...sprites.filter((s) => s.type !== "Spawn"),
+        shaman,
+      ].sort(sortSprites);
       this.addChild(textManager);
 
       // This setTimeout prevent skipping the first message after the splash screen
+      /*
       setTimeout(() => {
         textManager.displayText("1", () => {
           textManager.displayText("2", () => {
@@ -133,6 +147,7 @@ export function makeMainScene() {
           });
         });
       }, 500)
+      */
     },
     update: function () {
       if (this.isGameStarted) {
@@ -169,7 +184,7 @@ export function makeMainScene() {
               this.children = [];
               const creditScreen = makeCreditScreenScene();
               this.addChild(creditScreen);
-              this.isCredit = true
+              this.isCredit = true;
             });
           });
         }
@@ -190,7 +205,7 @@ export function makeMainScene() {
   });
   scene.addChild(splashScreenScene);
   */
-  scene.onStart()
+  scene.onStart();
 
   return scene;
 }

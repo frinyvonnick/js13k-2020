@@ -1,4 +1,6 @@
-import { Scene, Text, keyPressed } from "kontra";
+import { Scene, Text, keyPressed, Sprite } from "kontra";
+
+import { drawShamanGhost } from '../entities/Shaman'
 
 export function makeTextManager() {
   const content = Text({
@@ -24,8 +26,16 @@ export function makeTextManager() {
     height: 60,
     textAlign: "right",
   });
+  const shamanGhost = Sprite({
+    x: 400,
+    y: 200,
+    width: 32,
+    height: 32,
+    opacity: 0.5,
+    render: drawShamanGhost,
+  })
 
-  return Scene({
+  const scene = Scene({
     id: "text",
     text: "",
     cullObjects: false,
@@ -39,6 +49,7 @@ export function makeTextManager() {
       this.text = str;
       this.callback = callback;
       this.children[1].opacity = 1;
+      this.show()
     },
 
     update: function () {
@@ -58,6 +69,7 @@ export function makeTextManager() {
           this.callback = null
           cb();
         }
+        this.hide()
       }
     },
 
@@ -65,6 +77,7 @@ export function makeTextManager() {
       if (!this.text) {
         return;
       }
+
       this.context.beginPath();
       this.context.fillStyle = "white";
       this.context.strokeStyle = "black";
@@ -73,6 +86,10 @@ export function makeTextManager() {
       this.context.fill();
       this.context.stroke();
     },
-    children: [content, next],
+    children: [content, next, shamanGhost],
   });
+
+  scene.hide()
+
+  return scene
 }
