@@ -20,6 +20,7 @@ export function render() {
   this.context.restore();
 
   this.context.beginPath();
+  this.context.save()
   this.context.fillStyle = this.computedColor;
   this.context.moveTo(this.width / 2, topY)
   this.context.lineTo(this.width, this.height)
