@@ -3,6 +3,28 @@ export function render() {
   this.context.fillStyle = "#277ae1";
   this.context.rect(0, -2, this.width, this.height);
   this.context.fill();
+
+  this.context.beginPath();
+  this.context.strokeStyle = "#cc4a38";
+  this.context.lineWidth = 2;
+  this.context.arc(
+    0,
+    this.height / 2 - 2,
+    (this.height - 2) / 2,
+    1.5 * Math.PI,
+    2.5 * Math.PI,
+    false
+  );
+  this.context.moveTo(this.width, this.height - 2);
+  this.context.arc(
+    this.width,
+    this.height / 2 - 2,
+    (this.height - 2) / 2,
+    2.5 * Math.PI,
+    1.5 * Math.PI,
+    false
+  );
+  this.context.stroke();
 }
 
 export function update(dt = 1 / 60) {
