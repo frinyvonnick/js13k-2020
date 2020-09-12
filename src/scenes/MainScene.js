@@ -46,6 +46,8 @@ const availableEntities = {
 export function makeMainScene() {
   const sprites = generateSpritesFromEntities();
   const spawn = sprites.find((sprite) => sprite.type === "Spawn");
+  spawn.inventory = spawn.inventory.split(',').filter(s => s)
+  console.log('spawn', spawn)
   const end = sprites.find((sprite) => sprite.type === "End");
   end.opacity = 0;
 
@@ -160,10 +162,13 @@ export function makeMainScene() {
     },
   });
 
+  /*
   const splashScreenScene = makeSplashScreenScene({
     onStart: scene.onStart.bind(scene),
   });
   scene.addChild(splashScreenScene);
+  */
+  scene.onStart()
 
   return scene;
 }

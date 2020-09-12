@@ -5,9 +5,9 @@ import { render as r } from "../../src/entities/Ground";
 
 export const defaultValues = {
   ...commonValues,
-  width: 50,
-  height: 50,
-  color: "red",
+  width: 100,
+  height: 10,
+  color: "#61452d",
 };
 
 export function computeProps(props) {

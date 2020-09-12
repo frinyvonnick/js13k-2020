@@ -8,6 +8,7 @@ export const defaultValues = {
   width: 100,
   height: 100,
   color: "purple",
+  inventory: "",
 };
 
 export function computeProps(props) {

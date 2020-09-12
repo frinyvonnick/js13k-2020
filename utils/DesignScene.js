@@ -238,8 +238,8 @@ export function makeDesignScene() {
         entities.push(
           entity.computeProps({
             ...entity.defaultValues,
-            x,
-            y,
+            x: Math.round((x + scene.sx) / scene.scaleX),
+            y: Math.round((y + scene.sy) / scene.scaleX),
             id: newSprite.id,
             type,
           })
