@@ -77,6 +77,7 @@ function compress(json) {
     "foliageColor",
     "trunkColor",
     "foliageShadowColor",
+    "opened",
   ];
 
   const typeMappingSave = [
@@ -107,6 +108,9 @@ function compress(json) {
     if (el.scaleX === 1) {
       delete el.scaleX
     }
+
+    el.x = Math.round(el.x)
+    el.y = Math.round(el.y)
 
     const typeMapping = typeMappingSave.find(([type]) => type === el.type);
     if (typeMapping) {
