@@ -6,7 +6,7 @@ export function makeCreditScreenScene() {
     anchor: { x: 0.5, y: 0.5 },
     textAlign: "center",
     color: "black",
-  }
+  };
   const creditScreenTitle = Text({
     ...common,
     text: "Credits",

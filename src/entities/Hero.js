@@ -203,5 +203,5 @@ export function makeHero({ onPick, textManager }) {
     },
   });
 
-  return hero
+  return hero;
 }

@@ -120,15 +120,8 @@ export function drawShamanGhost() {
   this.context.beginPath();
   this.context.fillStyle = "#c5e9b1";
   this.context.strokeStyle = "#daffc5";
-  this.context.lineWidth = 15
-  this.context.arc(
-    this.width / 7,
-    0,
-    this.width,
-    0,
-    2 * Math.PI,
-    false
-  );
+  this.context.lineWidth = 15;
+  this.context.arc(this.width / 7, 0, this.width, 0, 2 * Math.PI, false);
   this.context.fill();
   this.context.stroke();
 

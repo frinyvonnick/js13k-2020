@@ -1,6 +1,6 @@
 import { Scene, Text, keyPressed, Sprite } from "kontra";
 
-import { drawShamanGhost } from '../entities/Shaman'
+import { drawShamanGhost } from "../entities/Shaman";
 
 export function makeTextManager() {
   const common = {
@@ -9,9 +9,9 @@ export function makeTextManager() {
     width: 380,
     height: 60,
     color: "black",
-  }
+  };
   const content = Text({
-    ...common, 
+    ...common,
     text: "",
     font: "18px Arial",
     y: 485,
@@ -19,7 +19,7 @@ export function makeTextManager() {
   });
 
   const next = Text({
-    ...common, 
+    ...common,
     group: 0,
     text: "Press 'Enter' to continue",
     font: "14px Arial",
@@ -33,7 +33,7 @@ export function makeTextManager() {
     height: 32,
     opacity: 0.5,
     render: drawShamanGhost,
-  })
+  });
 
   const scene = Scene({
     text: "",
@@ -41,15 +41,15 @@ export function makeTextManager() {
     width: 800,
     height: 600,
     hasPressedEnter: false,
-    isTextDisplayed: function() {
-      return this.text !== ''
+    isTextDisplayed: function () {
+      return this.text !== "";
     },
     displayText: function (str, callback, hideShaman) {
       this.text = str;
       this.callback = callback;
-      this.hideShaman = hideShaman
+      this.hideShaman = hideShaman;
       this.children[1].opacity = 1;
-      this.show()
+      this.show();
     },
 
     update: function () {
@@ -59,15 +59,15 @@ export function makeTextManager() {
       this.children[0].text = this.text;
 
       if (keyPressed("enter")) {
-        this.hasPressedEnter = true
+        this.hasPressedEnter = true;
       } else if (this.hasPressedEnter && !keyPressed("enter")) {
-        this.hasPressedEnter = false
+        this.hasPressedEnter = false;
         this.text = "";
         this.children[1].opacity = 0;
-        this.hide()
+        this.hide();
         if (this.callback) {
-          const cb = this.callback
-          this.callback = null
+          const cb = this.callback;
+          this.callback = null;
           cb();
         }
       }
@@ -79,7 +79,7 @@ export function makeTextManager() {
       }
 
       if (this.hideShaman) {
-        this.children[2].opacity = 0
+        this.children[2].opacity = 0;
       }
 
       this.context.beginPath();
@@ -93,7 +93,7 @@ export function makeTextManager() {
     children: [content, next, shamanGhost],
   });
 
-  scene.hide()
+  scene.hide();
 
-  return scene
+  return scene;
 }

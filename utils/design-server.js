@@ -102,15 +102,15 @@ function compress(json) {
     delete el.id;
 
     if (el.blur === 0) {
-      delete el.blur
+      delete el.blur;
     }
 
     if (el.scaleX === 1) {
-      delete el.scaleX
+      delete el.scaleX;
     }
 
-    el.x = Math.round(el.x)
-    el.y = Math.round(el.y)
+    el.x = Math.round(el.x);
+    el.y = Math.round(el.y);
 
     const typeMapping = typeMappingSave.find(([type]) => type === el.type);
     if (typeMapping) {
@@ -123,10 +123,8 @@ function compress(json) {
       JSON.stringify(el).includes("Computed")
     ) {
       Object.keys(el).forEach((key) => {
-        if (
-          (key.includes("Color") || key.includes("color"))
-        ) {
-          if (!key.includes('computed') && !key.includes('Computed')) {
+        if (key.includes("Color") || key.includes("color")) {
+          if (!key.includes("computed") && !key.includes("Computed")) {
             delete el[key];
           }
         }

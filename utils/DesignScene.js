@@ -339,7 +339,10 @@ export function makeDesignScene() {
               ? e.target.value
               : Number.parseFloat(e.target.value);
 
-            if (field === "group" && (value === "" || typeof value === 'string')) {
+            if (
+              field === "group" &&
+              (value === "" || typeof value === "string")
+            ) {
               return;
             }
 
@@ -351,7 +354,7 @@ export function makeDesignScene() {
 
             if (field === "group") {
               const previousGroup = scene.selectedSprite.group;
-              const group = value
+              const group = value;
               if (previousGroup === 3 && group === 2) {
                 selectedEntity.x += background.x;
               }

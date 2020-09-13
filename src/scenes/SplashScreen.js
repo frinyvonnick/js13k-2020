@@ -7,7 +7,7 @@ player.init(song);
 
 export function makeSplashScreenScene({ onStart }) {
   const splashScreenTitle = Text({
-    text: "Pataplateforme",
+    text: "Shaman not found",
     font: "64px Arial",
     color: "black",
     x: 400,
