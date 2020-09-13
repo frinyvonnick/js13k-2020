@@ -1,29 +1,29 @@
 import { Scene, Text, keyPressed, Sprite } from "kontra";
 
-import { drawShamanGhost } from '../entities/Shaman'
+import { drawShamanGhost } from "../entities/Shaman";
 
 export function makeTextManager() {
-  const content = Text({
+  const common = {
     group: 0,
-    text: "",
-    font: "18px Arial",
-    color: "black",
     x: 210,
-    y: 485,
     width: 380,
     height: 60,
+    color: "black",
+  };
+  const content = Text({
+    ...common,
+    text: "",
+    font: "18px Arial",
+    y: 485,
     textAlign: "center",
   });
 
   const next = Text({
+    ...common,
     group: 0,
     text: "Press 'Enter' to continue",
     font: "14px Arial",
-    color: "black",
-    x: 210,
     y: 555,
-    width: 380,
-    height: 60,
     textAlign: "right",
   });
   const shamanGhost = Sprite({
@@ -33,23 +33,23 @@ export function makeTextManager() {
     height: 32,
     opacity: 0.5,
     render: drawShamanGhost,
-  })
+  });
 
   const scene = Scene({
-    id: "text",
     text: "",
     cullObjects: false,
     width: 800,
     height: 600,
     hasPressedEnter: false,
-    isTextDisplayed: function() {
-      return this.text !== ''
+    isTextDisplayed: function () {
+      return this.text !== "";
     },
-    displayText: function (str, callback) {
+    displayText: function (str, callback, hideShaman) {
       this.text = str;
       this.callback = callback;
+      this.hideShaman = hideShaman;
       this.children[1].opacity = 1;
-      this.show()
+      this.show();
     },
 
     update: function () {
@@ -59,23 +59,27 @@ export function makeTextManager() {
       this.children[0].text = this.text;
 
       if (keyPressed("enter")) {
-        this.hasPressedEnter = true
+        this.hasPressedEnter = true;
       } else if (this.hasPressedEnter && !keyPressed("enter")) {
-        this.hasPressedEnter = false
+        this.hasPressedEnter = false;
         this.text = "";
         this.children[1].opacity = 0;
+        this.hide();
         if (this.callback) {
-          const cb = this.callback
-          this.callback = null
+          const cb = this.callback;
+          this.callback = null;
           cb();
         }
-        this.hide()
       }
     },
 
     render: function () {
       if (!this.text) {
         return;
+      }
+
+      if (this.hideShaman) {
+        this.children[2].opacity = 0;
       }
 
       this.context.beginPath();
@@ -89,7 +93,7 @@ export function makeTextManager() {
     children: [content, next, shamanGhost],
   });
 
-  scene.hide()
+  scene.hide();
 
-  return scene
+  return scene;
 }

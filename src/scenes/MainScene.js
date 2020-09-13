@@ -27,9 +27,10 @@ import { GameManager } from "../managers/GameManager.js";
 import { ObjectManager } from "../managers/ObjectManager.js";
 import { makeTextManager } from "../managers/TextManager.js";
 
-import compressedEntities from "../../utils/entities.json";
-import { uncompress } from "../../utils/json";
-const entities = uncompress(compressedEntities);
+import compressedEntities from "../entities-prod.json";
+import colors from "../colors.json";
+import { uncompress } from "../utils/json";
+const entities = uncompress(compressedEntities, colors);
 
 const availableEntities = {
   Ground,
@@ -53,8 +54,6 @@ export function makeMainScene() {
   const objectManager = new ObjectManager(textManager);
 
   const sprites = generateSpritesFromEntities();
-  const spawn = sprites.find((sprite) => sprite.type === "Spawn");
-  spawn.inventory = spawn.inventory.split(",").filter((s) => s);
 
   const end = sprites.find((sprite) => sprite.type === "End");
   end.opacity = 0;
@@ -73,49 +72,39 @@ export function makeMainScene() {
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
 
-  const bounces = middlegroundSprites
-    .filter((sprite) => sprite.type === "Bounce")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
-  const slides = middlegroundSprites
-    .filter((sprite) => sprite.type === "Slide")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
-  const fades = middlegroundSprites
-    .filter((sprite) => sprite.type === "Fade")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
-  const collidingSprites = [
-    ...middlegroundSprites.filter((sprite) => ["Ground"].includes(sprite.type)),
-    ...bounces,
-    ...slides,
-    ...fades,
-  ].sort((a, b) => b.y - a.y);
+  const hideSprites = (arr, type) => {
+    return arr
+      .filter((sprite) => sprite.type === type)
+      .map((sprite) => {
+        sprite.opacity = 0;
+        return sprite;
+      });
+  };
+
+  const bounces = hideSprites(middlegroundSprites, "Bounce");
+  const slides = hideSprites(middlegroundSprites, "Slide");
+  const fades = hideSprites(middlegroundSprites, "Fade");
+  const collidingSprites = middlegroundSprites
+    .filter((sprite) =>
+      ["Ground", "Bounce", "Slide", "Fade"].includes(sprite.type)
+    )
+    .sort((a, b) => b.y - a.y);
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)
   );
 
-  const hero = makeHero(spawn, {
+  const hero = makeHero({
     textManager,
     onPick: function (newItem) {
+      const show = (platform) => {
+        platform.opacity = 1;
+      };
       if (newItem === BANDANA) {
-        bounces.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        bounces.forEach(show);
       } else if (newItem === BOOTS) {
-        slides.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        slides.forEach(show);
       } else if (newItem === CLOAK) {
-        fades.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        fades.forEach(show);
       }
     },
   });
@@ -141,13 +130,21 @@ export function makeMainScene() {
       this.addChild(textManager);
 
       // This setTimeout prevent skipping the first message after the splash screen
-      /*setTimeout(() => {
-        textManager.displayText("1", () => {
-          textManager.displayText("2", () => {
-            textManager.displayText("3");
-          });
-        });
-      }, 500)*/
+      setTimeout(() => {
+        textManager.displayText(
+          "I killed the monster that attacked our village. He stoles our colors.",
+          () => {
+            textManager.displayText(
+              "I'm stucked in the forest, find them and come rescue me.",
+              () => {
+                textManager.displayText(
+                  "Move with 'A', 'D' and jump with 'Space'"
+                );
+              }
+            );
+          }
+        );
+      }, 500);
     },
     update: function () {
       if (this.isGameStarted) {
@@ -162,7 +159,7 @@ export function makeMainScene() {
           },
         });
         this.camera.x = hero.x;
-        this.camera.y = hero.y-150;
+        this.camera.y = hero.y - 150;
 
         foregroundSprites.forEach((sprite) => {
           sprite.dx = hero.dx * 1.5 * -1;
@@ -173,20 +170,22 @@ export function makeMainScene() {
 
         if (
           collides(hero, end) &&
-          hero.hasInInventory("Boots") &&
-          hero.hasInInventory("Bandana") &&
-          hero.hasInInventory("Cloak") &&
+          hero.inventory.every((i) =>
+            ["Boots", "Bandana", "Cloak"].includes(i)
+          ) &&
           !this.isEnd
         ) {
           this.isEnd = true;
-          textManager.displayText("1", () => {
-            textManager.displayText("2", () => {
+          textManager.displayText(
+            "Thank you for saving me hero!",
+            () => {
               this.children = [];
               const creditScreen = makeCreditScreenScene();
               this.addChild(creditScreen);
               this.isCredit = true;
-            });
-          });
+            },
+            true
+          );
         }
         if (this.isCredit) {
           this.camera.x = 400;
@@ -199,13 +198,10 @@ export function makeMainScene() {
     },
   });
 
-  /*
   const splashScreenScene = makeSplashScreenScene({
     onStart: scene.onStart.bind(scene),
   });
   scene.addChild(splashScreenScene);
-  */
-  scene.onStart();
 
   return scene;
 }

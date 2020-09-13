@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { compress, uncompress } from "./json";
 import {
   Scene,
   Sprite,
@@ -340,11 +339,42 @@ export function makeDesignScene() {
               ? e.target.value
               : Number.parseFloat(e.target.value);
 
+            if (
+              field === "group" &&
+              (value === "" || typeof value === "string")
+            ) {
+              return;
+            }
+
             const selectedEntityIndex = entities.findIndex(
               (entity) => entity.id === scene.selectedSprite.id
             );
             const selectedEntity = entities[selectedEntityIndex];
             selectedEntity[field] = value;
+
+            if (field === "group") {
+              const previousGroup = scene.selectedSprite.group;
+              const group = value;
+              if (previousGroup === 3 && group === 2) {
+                selectedEntity.x += background.x;
+              }
+              if (previousGroup === 2 && group === 3) {
+                selectedEntity.x -= background.x;
+              }
+              if (previousGroup === 1 && group === 2) {
+                selectedEntity.x += foreground.x;
+              }
+              if (previousGroup === 2 && group === 1) {
+                selectedEntity.x -= foreground.x;
+              }
+              if (previousGroup === 3 && group === 1) {
+                selectedEntity.x += background.x - foreground.x;
+              }
+              if (previousGroup === 1 && group === 3) {
+                selectedEntity.x += foreground.x - background.x;
+              }
+            }
+
             entities[selectedEntityIndex] = availableEntities[
               selectedEntity.type
             ].computeProps(entities[selectedEntityIndex]);
@@ -413,14 +443,12 @@ function cloneSprite(sprite, onDown) {
 function save(entities) {
   fetch("http://localhost:7000", {
     method: "POST",
-    body: compress(entities),
+    body: JSON.stringify(entities),
   })
     .then((res) => res.text())
     .then(console.log);
 }
 
 function load() {
-  return fetch("http://localhost:7000")
-    .then((res) => res.text())
-    .then((json) => uncompress(json));
+  return fetch("http://localhost:7000").then((res) => res.json());
 }
