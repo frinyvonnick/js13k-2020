@@ -17,7 +17,7 @@ export function makeCreditScreenScene() {
   const creditScreenText = Text({
     ...common,
     text: `Development: Vincent Poesmann, Yvonnick Frin\n
-    Level design: Lucas Dupuy\n
+    Level design: Lucas Dupuy, Vincent Poesmann\n
     Music: Thomas Bazin\n
     Graphism: Yvonnick Frin`,
     font: "24px Arial",
@@ -26,7 +26,5 @@ export function makeCreditScreenScene() {
 
   return Scene({
     children: [creditScreenText, creditScreenTitle],
-    x: 0,
-    y: 0,
   });
 }

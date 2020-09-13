@@ -84,12 +84,11 @@ export function makeMainScene() {
   const bounces = hideSprites(middlegroundSprites, "Bounce");
   const slides = hideSprites(middlegroundSprites, "Slide");
   const fades = hideSprites(middlegroundSprites, "Fade");
-  const collidingSprites = [
-    ...middlegroundSprites.filter((sprite) => ["Ground"].includes(sprite.type)),
-    ...bounces,
-    ...slides,
-    ...fades,
-  ].sort((a, b) => b.y - a.y);
+  const collidingSprites = middlegroundSprites
+    .filter((sprite) =>
+      ["Ground", "Bounce", "Slide", "Fade"].includes(sprite.type)
+    )
+    .sort((a, b) => b.y - a.y);
   const objects = middlegroundSprites.filter((sprite) =>
     ["Key", "Chest"].includes(sprite.type)
   );
@@ -171,9 +170,9 @@ export function makeMainScene() {
 
         if (
           collides(hero, end) &&
-          hero.hasInInventory("Boots") &&
-          hero.hasInInventory("Bandana") &&
-          hero.hasInInventory("Cloak") &&
+          hero.inventory.every((i) =>
+            ["Boots", "Bandana", "Cloak"].includes(i)
+          ) &&
           !this.isEnd
         ) {
           this.isEnd = true;
