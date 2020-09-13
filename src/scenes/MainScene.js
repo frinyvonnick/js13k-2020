@@ -72,24 +72,18 @@ export function makeMainScene() {
   const foregroundSprites = sprites.filter((sprite) => sprite.group === 1);
   const backgroundSprites = sprites.filter((sprite) => sprite.group === 3);
 
-  const bounces = middlegroundSprites
-    .filter((sprite) => sprite.type === "Bounce")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
-  const slides = middlegroundSprites
-    .filter((sprite) => sprite.type === "Slide")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
-  const fades = middlegroundSprites
-    .filter((sprite) => sprite.type === "Fade")
-    .map((sprite) => {
-      sprite.opacity = 0;
-      return sprite;
-    });
+  const hideSprites = (arr, type) => {
+    return arr
+      .filter((sprite) => sprite.type === type)
+      .map((sprite) => {
+        sprite.opacity = 0;
+        return sprite;
+      });
+  };
+
+  const bounces = hideSprites(middlegroundSprites, "Bounce");
+  const slides = hideSprites(middlegroundSprites, "Slide");
+  const fades = hideSprites(middlegroundSprites, "Fade");
   const collidingSprites = [
     ...middlegroundSprites.filter((sprite) => ["Ground"].includes(sprite.type)),
     ...bounces,
@@ -103,18 +97,15 @@ export function makeMainScene() {
   const hero = makeHero({
     textManager,
     onPick: function (newItem) {
+      const show = (platform) => {
+        platform.opacity = 1;
+      };
       if (newItem === BANDANA) {
-        bounces.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        bounces.forEach(show);
       } else if (newItem === BOOTS) {
-        slides.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        slides.forEach(show);
       } else if (newItem === CLOAK) {
-        fades.forEach((platform) => {
-          platform.opacity = 1;
-        });
+        fades.forEach(show);
       }
     },
   });
@@ -141,11 +132,19 @@ export function makeMainScene() {
 
       // This setTimeout prevent skipping the first message after the splash screen
       setTimeout(() => {
-        textManager.displayText("I killed the monster that attacked our village. He stoles our colors.", () => {
-          textManager.displayText("I'm stuck in the forest, find them and come rescue me.", () => {
-            textManager.displayText("Move with 'A', 'D' and jump with 'Space'");
-          });
-        });
+        textManager.displayText(
+          "I killed the monster that attacked our village. He stoles our colors.",
+          () => {
+            textManager.displayText(
+              "I'm stuck in the forest, find them and come rescue me.",
+              () => {
+                textManager.displayText(
+                  "Move with 'A', 'D' and jump with 'Space'"
+                );
+              }
+            );
+          }
+        );
       }, 500);
     },
     update: function () {

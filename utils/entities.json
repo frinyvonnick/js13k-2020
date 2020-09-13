@@ -17,7 +17,7 @@
     "x": -2500,
     "y": -2500,
     "blur": 0,
-    "width": 10500,
+    "width": 7000,
     "height": 4200,
     "color": "#e3f0db",
     "lightColor": "#f9fcf8",
@@ -25,28 +25,16 @@
     "id": "8e15dc40-21c6-4f80-9ef5-061e9f80aeb4"
   },
   {
-    "x": -2668,
-    "y": -2614,
-    "type": "Ground",
-    "width": 500,
-    "height": 6000,
-    "color": "#ada490",
     "group": 2,
     "zIndex": 6,
+    "x": -2660,
+    "y": -2000,
     "blur": 0,
+    "width": 500,
+    "height": 2500,
+    "color": "#ada490",
+    "type": "Ground",
     "id": "de7d921b-7c02-47d7-929c-39485e893d80"
-  },
-  {
-    "x": 7500,
-    "y": -5400,
-    "type": "Ground",
-    "width": 500,
-    "height": 6000,
-    "color": "#ada490",
-    "group": 2,
-    "zIndex": 6,
-    "blur": 0,
-    "id": "9fc59f1c-718c-471d-af7d-bee0ce79cf4c"
   },
   {
     "x": 2882,
@@ -181,28 +169,16 @@
     "id": "b20dfa02-86ea-4731-86e8-4fefa1bc40eb"
   },
   {
-    "x": -590,
+    "group": 2,
+    "zIndex": 1,
+    "x": -701,
     "y": 170,
-    "type": "Ground",
-    "width": 40,
+    "blur": 0,
+    "width": 142,
     "height": 50,
     "color": "#61452d",
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "48d66f5a-c681-4233-9e92-70420f8240aa"
-  },
-  {
-    "x": -620,
-    "y": 160,
     "type": "Ground",
-    "width": 40,
-    "height": 60,
-    "color": "#61452d",
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "c9459c85-5381-447c-aa8c-b7594177b9cb"
+    "id": "48d66f5a-c681-4233-9e92-70420f8240aa"
   },
   {
     "x": -720,
@@ -217,18 +193,6 @@
     "id": "f653579a-4621-443b-9547-eba7939e93f2"
   },
   {
-    "x": -710,
-    "y": 150,
-    "type": "Ground",
-    "width": 100,
-    "height": 70,
-    "color": "#61452d",
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "d8deb355-42e0-4c87-bc48-23b06047bcc7"
-  },
-  {
     "x": -430,
     "y": -50,
     "type": "Ground",
@@ -241,8 +205,8 @@
     "id": "145b9a7b-f4d6-4438-a799-8c3181371784"
   },
   {
-    "x": -669,
-    "y": 110,
+    "x": -684,
+    "y": 139,
     "type": "Key",
     "keyRadius": 5,
     "width": 20,
@@ -696,7 +660,7 @@
     "y": 700,
     "blur": 0,
     "width": 460,
-    "height": 2000,
+    "height": 1400,
     "color": "#75685d",
     "type": "Ground",
     "id": "214119d7-d025-493d-bf52-761b4ca9c56b"
@@ -1040,28 +1004,16 @@
     "id": "72ff99c6-1db9-4587-82a2-124b5b76f765"
   },
   {
-    "x": 445,
-    "y": -175,
-    "type": "Ground",
-    "width": 110,
-    "height": 15,
-    "color": "#61452d",
     "group": 2,
     "zIndex": 1,
-    "blur": 0,
-    "id": "b7230463-3c5b-46bb-97c6-53d72631f4c8"
-  },
-  {
     "x": 485,
-    "y": -205,
+    "y": -195,
+    "blur": 0,
+    "width": 30,
+    "height": 30,
     "content": "Cloak",
     "opened": false,
     "type": "Chest",
-    "width": 30,
-    "height": 30,
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
     "id": "f8db6e4f-1223-4bfc-ad3d-38665fcb7994"
   },
   {
@@ -1099,19 +1051,8 @@
     "id": "b3011a8f-54bf-4f4d-80f5-2d12491d51bf"
   },
   {
-    "x": 2040,
-    "y": 115,
-    "type": "Fade",
-    "width": 100,
-    "height": 16,
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "ca7271a6-7886-44b0-8370-d89cf011b7c2"
-  },
-  {
-    "x": 2270,
-    "y": 160,
+    "x": 2232,
+    "y": 132,
     "type": "Fade",
     "width": 100,
     "height": 16,
@@ -1121,59 +1062,26 @@
     "id": "3e4eaa8d-84be-4dee-a578-ffd0280ffffd"
   },
   {
-    "x": 2180,
-    "y": 145,
-    "type": "Fade",
-    "width": 100,
-    "height": 16,
     "group": 2,
     "zIndex": 1,
+    "x": 2090,
+    "y": 116,
     "blur": 0,
-    "id": "07e6b9b4-a125-4c06-af32-ecded0e5b8a9"
-  },
-  {
-    "x": 2100,
-    "y": 130,
-    "type": "Fade",
-    "width": 100,
+    "width": 150,
     "height": 16,
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
+    "type": "Fade",
     "id": "36756f8e-1913-446e-a665-54dbe1f7ee4d"
   },
   {
-    "x": 2360,
-    "y": 145,
-    "type": "Fade",
-    "width": 100,
-    "height": 16,
     "group": 2,
     "zIndex": 1,
+    "x": 2328,
+    "y": 116,
     "blur": 0,
-    "id": "b87f7984-4c0f-4601-965b-6005ab58d81b"
-  },
-  {
-    "x": 2440,
-    "y": 130,
-    "type": "Fade",
-    "width": 100,
+    "width": 150,
     "height": 16,
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
+    "type": "Fade",
     "id": "7bafc780-3929-4856-bbeb-5c7a45ba623b"
-  },
-  {
-    "x": 2500,
-    "y": 115,
-    "type": "Fade",
-    "width": 100,
-    "height": 16,
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "bbadbc74-9c0d-4a5c-8bac-2e6ee97a600c"
   },
   {
     "group": 2,
@@ -1281,14 +1189,14 @@
     "id": "476a97a4-7b60-49bd-a367-bb53e001e947"
   },
   {
-    "x": 2540,
-    "y": 100,
-    "type": "Fade",
-    "width": 100,
-    "height": 16,
     "group": 2,
     "zIndex": 1,
+    "x": 2474,
+    "y": 100,
     "blur": 0,
+    "width": 166,
+    "height": 16,
+    "type": "Fade",
     "id": "28f17caa-6bb1-406d-b620-0f0b7acc5041"
   },
   {
@@ -1561,16 +1469,16 @@
     "id": "bf102d53-0616-4bcc-af79-c14102cfd033"
   },
   {
-    "x": -615,
-    "y": -1500,
-    "type": "Sequoia",
-    "computedColor": "#73955F",
-    "width": 100,
-    "height": 2000,
-    "color": "#73955F",
     "group": 2,
     "zIndex": 8,
+    "x": -615,
+    "y": -900,
     "blur": 0,
+    "width": 100,
+    "height": 1500,
+    "color": "#73955F",
+    "type": "Sequoia",
+    "computedColor": "#73955F",
     "id": "eee8ba28-7e5a-4491-a458-87f8fa7b2671"
   },
   {
@@ -1885,19 +1793,6 @@
     "id": "3806c792-7f4b-41d3-82f1-d10cff4e2962"
   },
   {
-    "x": 2353,
-    "y": -634,
-    "inventory": "Boots,Cloak,Bandana",
-    "type": "Spawn",
-    "width": 100,
-    "height": 100,
-    "color": "purple",
-    "group": 2,
-    "zIndex": 1,
-    "blur": 0,
-    "id": "fb8a171d-6e9a-4c99-8293-2f8ca110e87f"
-  },
-  {
     "x": -154,
     "y": -1532,
     "type": "Sequoia",
@@ -1945,21 +1840,6 @@
     "trunkHeight": 200,
     "trunkColor": "#3E4937",
     "id": "62d0b694-6349-4fd4-87ef-99f8a895f2ae"
-  },
-  {
-    "group": 1,
-    "zIndex": 1,
-    "x": -4549,
-    "y": 592,
-    "blur": 1,
-    "hillWidth": 800,
-    "hillHeight": 100,
-    "color": "#AAD293",
-    "type": "Hill",
-    "computedColor": "#55694a",
-    "width": 400,
-    "height": 50,
-    "id": "7f78f0a7-5e06-4a24-9eec-ed77506fa47f"
   },
   {
     "x": -1643,

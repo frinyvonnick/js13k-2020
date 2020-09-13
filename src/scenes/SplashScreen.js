@@ -36,7 +36,7 @@ export function makeSplashScreenScene({ onStart }) {
       }
 
       if (this.isMusicGenerated && !this.isGameStarted) {
-        splashScreenText.text = "Press start to begin";
+        splashScreenText.text = "Press 'Enter' to start";
       }
 
       if (!this.isGameStarted && keyPressed("enter")) {

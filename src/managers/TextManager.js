@@ -36,7 +36,6 @@ export function makeTextManager() {
   })
 
   const scene = Scene({
-    id: "text",
     text: "",
     cullObjects: false,
     width: 800,
