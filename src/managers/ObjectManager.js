@@ -4,9 +4,9 @@ import { KEY, BOOTS, BANDANA, CLOAK } from "../entities/HeroInventory";
 
 export const CHEST = "Chest";
 const TEXTS = {
-  [BOOTS]: "1",
-  [BANDANA]: "1",
-  [CLOAK]: "1",
+  [BOOTS]: "You can double jump!",
+  [BANDANA]: "You looks nice!",
+  [CLOAK]: "You can glide!",
 };
 
 export class ObjectManager {

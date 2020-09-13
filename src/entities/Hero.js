@@ -20,13 +20,13 @@ const MAX_JUMP_FRAMES = 15;
 const GRAVITY = 0.6;
 const GLIDE_SPEED = 0.2;
 
-export function makeHero({ x, y, inventory }, { onPick, textManager }) {
+export function makeHero({ onPick, textManager }) {
   const hero = Sprite({
     group: 2,
     zIndex: 3,
     anchor: { x: 0.5, y: 0.5 },
-    x: x || 100,
-    y: y || 10,
+    x: -1434,
+    y: 423,
     width: 10,
     height: 112 / 3,
     dx: 0,
@@ -202,10 +202,6 @@ export function makeHero({ x, y, inventory }, { onPick, textManager }) {
       this.isSliding = true;
     },
   });
-
-  inventory.forEach(object => {
-    hero.addToInventory(object)
-  })
 
   return hero
 }
