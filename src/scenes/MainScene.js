@@ -135,7 +135,7 @@ export function makeMainScene() {
           "I killed the monster that attacked our village. He stoles our colors.",
           () => {
             textManager.displayText(
-              "I'm stuck in the forest, find them and come rescue me.",
+              "I'm stucked in the forest, find them and come rescue me.",
               () => {
                 textManager.displayText(
                   "Move with 'A', 'D' and jump with 'Space'"

@@ -5,7 +5,7 @@ import { KEY, BOOTS, BANDANA, CLOAK } from "../entities/HeroInventory";
 export const CHEST = "Chest";
 const TEXTS = {
   [BOOTS]: "You can double jump!",
-  [BANDANA]: "You looks nice!",
+  [BANDANA]: "You look nice!",
   [CLOAK]: "You can glide!",
 };
 

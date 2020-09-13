@@ -1,11 +1,11 @@
 export function render() {
   this.context.beginPath();
-  this.context.fillStyle = "#e6de63";
+  this.context.fillStyle = "#cc4a38";
   this.context.rect(0, -2, this.width, this.height);
   this.context.fill();
 
   this.context.beginPath();
-  this.context.strokeStyle = "#277ae1";
+  this.context.strokeStyle = "#e6de63";
   this.context.lineWidth = 2;
   this.context.moveTo(0, -2);
   this.context.lineTo(0, this.height - 2);
