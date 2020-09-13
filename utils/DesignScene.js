@@ -339,11 +339,39 @@ export function makeDesignScene() {
               ? e.target.value
               : Number.parseFloat(e.target.value);
 
+            if (field === "group" && (value === "" || typeof value === 'string')) {
+              return;
+            }
+
             const selectedEntityIndex = entities.findIndex(
               (entity) => entity.id === scene.selectedSprite.id
             );
             const selectedEntity = entities[selectedEntityIndex];
             selectedEntity[field] = value;
+
+            if (field === "group") {
+              const previousGroup = scene.selectedSprite.group;
+              const group = value
+              if (previousGroup === 3 && group === 2) {
+                selectedEntity.x += background.x;
+              }
+              if (previousGroup === 2 && group === 3) {
+                selectedEntity.x -= background.x;
+              }
+              if (previousGroup === 1 && group === 2) {
+                selectedEntity.x += foreground.x;
+              }
+              if (previousGroup === 2 && group === 1) {
+                selectedEntity.x -= foreground.x;
+              }
+              if (previousGroup === 3 && group === 1) {
+                selectedEntity.x += background.x - foreground.x;
+              }
+              if (previousGroup === 1 && group === 3) {
+                selectedEntity.x += foreground.x - background.x;
+              }
+            }
+
             entities[selectedEntityIndex] = availableEntities[
               selectedEntity.type
             ].computeProps(entities[selectedEntityIndex]);
