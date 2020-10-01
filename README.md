@@ -1,6 +1,8 @@
 # js13k-2020
 
-[Main picture](/doc/main.png)
+<p align="center">
+  <img src="/doc/main.png">
+</p>
 
 ## Install
 
