@@ -1,5 +1,9 @@
 # js13k-2020
 
+<p align="center">
+  <img src="/doc/main.png">
+</p>
+
 ## Install
 
 ```sh
